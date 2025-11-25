@@ -9,14 +9,12 @@ if [ "$a" -gt "$b" ]; then ... fi    # Supérieur
 if [ "$a" -ge "$b" ]; then ... fi    # Supérieur ou égal
 
 #comparaison de chaine
-
 if [ "$str1" = "$str2" ]; then ... fi      # Égal (attention aux espaces)
 if [ "$str1" != "$str2" ]; then ... fi     # Différent
 if [ -z "$str" ]; then ... fi              # Chaîne vide
 if [ -n "$str" ]; then ... fi              # Chaîne non vide
 
 #comparaison de fichier
-
 if [ -e "$fichier" ]; then ... fi    # Existe
 if [ -f "$fichier" ]; then ... fi    # Est un fichier régulier
 if [ -d "$fichier" ]; then ... fi    # Est un dossier
@@ -25,8 +23,6 @@ if [ -w "$fichier" ]; then ... fi    # Inscrivible
 if [ -x "$fichier" ]; then ... fi    # Exécutable
 
 #récupération des args
-
-#!/bin/bash
 echo "Premier argument : $1"
 echo "Deuxième argument : $2"
 echo "Tous les arguments : $@"
@@ -35,21 +31,18 @@ echo "Nom du script : $0"
 
 #fonction
 #syntaxe de base 
-
 ma_fonction() {
     echo "Appel de ma_fonction"
     return 0  # Retourne un code de sortie
 }
 
 #avec argument
-
 saluer() {
     echo "Bonjour, $1 !"
 }
 saluer "Alice"  # Appel avec argument
 
 #retourner des valeurs
-
 calculer() {
     local resultat=$(( $1 + $2 ))
     echo "$resultat"  # Retourne la valeur via echo

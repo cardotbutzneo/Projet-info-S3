@@ -3,8 +3,7 @@
 #include <stdio.h>
 
 typedef struct _noeud{
-
-};
-
+    int val;
+}Noeud;
 
 #endif
