@@ -1,0 +1,13 @@
+#!/bin/bash
+echo "Arboraissance : "
+echo "projet"
+echo "|-/bash"
+echo "    |-main.sh"
+echo "|-/include"
+echo "    |-main.h"
+echo "|-/src"
+echo "    |-fonction.c"
+echo "    |-main.c"
+echo "|-launch.sh"
+echo "|-makefile"
+echo "|-README"
