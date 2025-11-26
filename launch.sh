@@ -4,7 +4,7 @@ source ./bash/cmd.sh
 source ./bash/fonction.sh
 
 #exemple de lancement ./launch.sh [arg1 : cmd] [arg2 : help]
-gnuplot test.gp
+#gnuplot test.gp
 #on vérifit les dépendances avant le lancement
 verifDependance
 
