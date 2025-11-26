@@ -1,11 +1,12 @@
 #!/bin/bash
+
 source ./bash/cmd.sh
 source ./bash/fonction.sh
 
 #exemple de lancement ./launch.sh [arg1 : cmd] [arg2 : help]
 
 #on vérifit les dépendances avant le lancement
-#verifDependance
+verifDependance
 
 if [ "$2" = "--help" ] || [ "$2" = "-h" ];then
     aide "$1"
