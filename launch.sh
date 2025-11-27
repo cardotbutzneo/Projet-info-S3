@@ -6,13 +6,13 @@ source ./bash/fonction.sh
 #exemple de lancement ./launch.sh [arg1 : cmd] [arg2 : help]
 
 #on vérifit les dépendances avant le lancement
-
+verifDependance
 if [ "$1" = "-r" ] || [ "$1" = "--run" ];then
-    if { [ "$2" = "--force" ] || [ "$3" = "--force" ]; } && [ verifDependance ];then
+    if { [ "$2" = "--force" ] || [ "$3" = "--force" ]; } && [ "$?" -eq 0 ];then
         echo "Vous compilez avec une ou plusieurs librairies manquantes (mode --force)."
         echo "Vous n'aurez donc pas accès à tout le code."
         verif_flag=1 #dépendance non installé, pas acces aux graphique
-    elif [ verifDependance ];then
+    elif [ "$?" -eq 0 ];then
         echo "Erreur : Il manque une ou plusieurs dépendances pour compiler."
         echo "Utilisez l'option --force pour compiler malgré tout."
         exit 1
