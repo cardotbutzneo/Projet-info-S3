@@ -78,5 +78,7 @@ elif [ -z "$1" ];then
     echo "Erreur : le programme ne peut pas etre compiler sans option."
     echo "Ajouter -r ou --run pour compiler."
     echo "Exemple : ./launch -r [arg2] [arg3] ou ./launch --run [arg2] [arg3]"
+else
+    echo "Commande non trouvée"
 fi
 exit 0
