@@ -33,13 +33,27 @@ if [ "$1" = "-r" ] || [ "$1" = "--run" ]; then
     else
         make
     fi
+    exit 0
+fi
 
-elif [ "$1" = "-c" ] || [ "$1" = "--clean" ];then
-    if [ "$#" -gt 1 ];then
-        echo "Erreur : l'option '$1' ne doit pas etre suivit d'autres arguments."
-        echo "Utilisation correcte : ./launch.sh -c ou ./launch.sh --clean"
-    else
-        make clean
+if [ "$1" = "-c" ] || [ "$1" = "--clean" ]; then
+    if [ "$2" != "-a" ] && [ "$2" != "--all" ] && [ -n "$2" ]; then
+        echo "Erreur : l'option '$1' ne doit être suivie que par -a/--all ou aucun argument."
+        echo "Utilisation correcte : ./launch.sh -c ou ./launch.sh --clean [-a|--all]"
+        exit 1
+    fi
+
+    make clean
+
+    # Si -a ou --all est passé, supprime les graphiques sans demander
+    if [ "$2" = "-a" ] || [ "$2" = "--all" ]; then
+        echo "Suppression des graphiques et des données..."
+        rm -rf gnuplot/data/* 2>/dev/null
+        if [ $? -eq 0 ]; then
+            echo "Suppression des graphiques réussie" >> output/stdout
+        else
+            echo "Aucun dossier gnuplot/data à supprimer" >> output/stdout
+        fi
     fi
 
 elif [ "$2" = "--help" ] || [ "$2" = "-h" ];then
@@ -48,12 +62,14 @@ elif [ "$2" = "--help" ] || [ "$2" = "-h" ];then
 elif [ "$1" = "-h" ] || [ "$1" = "--help" ];then
     if [ -z "$2" ];then
         echo "exemple d'utilisation : <./launch.sh [arg1 : cmd] [arg2 : help]>"
+        exit 1
     fi
     if [ "$2" = "-a" ] || [ "$2" = "--all" ];then
         afficherDoc
         exit 0
     else
         echo "pour afficher toute la documentation saisissez : -h/--help -a/--all"
+        exit 0
     fi
 elif [ "$1" = "--arbo" ] && [ "$#" -eq 1 ];then
     arboraissance
@@ -63,24 +79,31 @@ elif [ "$1" = "histo" ] && [ $verif_flag -eq 0 ];then #non acces aux graphiques 
     if [ "$2" = "max" ];then
     #fonction
     echo "appel de la fonction pour max"
+    exit 0
     elif [ "$2" = "src" ];then
     echo "appel de la fonction pour src"
     #fonction
+    exit 0
     elif [ "$2" = "real" ];then
     echo "appel de la fonction pour real"
     #fonction
+    exit 0
     fi
 elif [ "$1" = "leaks" ];then
     if [ -z "$2" ];then
-    echo "argument manquant pour la commande <leaks>"
+        echo "argument manquant pour la commande <leaks>"
+        exit 1
     else #fonction
-    echo "appel de la fonction pour leaks"
+        echo "appel de la fonction pour leaks"
+        exit 0
     fi
 elif [ -z "$1" ];then
     echo "Erreur : le programme ne peut pas etre compiler sans option."
     echo "Ajouter -r ou --run pour compiler."
     echo "Exemple : ./launch -r [arg2] [arg3] ou ./launch --run [arg2] [arg3]"
+    exit 1
 else
     echo "Commande non trouvée"
+    exit 1
 fi
 exit 0

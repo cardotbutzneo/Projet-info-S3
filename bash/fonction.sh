@@ -15,28 +15,44 @@ verifDependance() {
     return 0
 }
 
-creerFichierData(){
+creerFichierData() {
     local args=("max" "src" "real")
-    if [ -z "$1" ];then
-        echo "aucun fichier créer : argument manqant" >> output/stderr
+    local fichier
+
+    # Vérifier si un argument est fourni
+    if [ -z "$1" ]; then
+        echo "Erreur : Aucun argument fourni. Utilisation : creerFichierData [max|src|real]" >> output/stderr
+        return 1
     fi
-    for arg in "${args[@]}";do
-        echo "$arg"
-        if [ "$1" = "$arg" ];then
-            echo "creation du fichier "$1".cvs" >> output/stdout
-            touch gnuplot/"$1".csv
-            $(ls output/stdout >& /dev/null)
-            if [ "$?" -ne 0 ];then
-                echo "Erreur : fichier non créer" >> stderr
-                return 1
-            else
-                echo "création du fichier réussi" >> output/stdout
-                return 0
-            fi
+    if [ ! -d "gnuplot/data" ];then
+        mkdir gnuplot/data
+    fi
+    # Vérifier si l'argument est valide
+    local arg_valide=false
+    for arg in "${args[@]}"; do
+        if [ "$1" = "$arg" ]; then
+            arg_valide=true
+            break
         fi
     done
-    echo "Erreur : argument non trouvé" >> output/stderr
-    return 1
+
+    if [ "$arg_valide" = false ]; then
+        echo "Erreur : Argument '$1' non valide. Utilisez max, src ou real." >> output/stderr
+        return 1
+    fi
+
+    # Créer le fichier
+    fichier="gnuplot/data/$1.csv"
+    touch "$fichier"
+
+    # Vérifier si le fichier a été créé
+    if [ ! -e "$fichier" ]; then
+        echo "Erreur : Impossible de créer le fichier $fichier" >> output/stderr
+        return 1
+    else
+        echo "Fichier $fichier créé avec succès" >> output/stdout
+        return 0
+    fi
 }
 
 

@@ -37,10 +37,12 @@ aide(){ # arg1 : nom de la commande
 }
 
 afficherDoc(){
-    echo "Affichage de toute la doc"
+    echo "Affichage de toute la documentation"
+    echo ""
     for file in doc/*;do
         if [ -f "$file" ]; then
                 cat "$file"
         fi
+        echo ""
     done
 }
