@@ -1,0 +1,6 @@
+Usage : histo [option]
+Créer un des types de graphique suivant :
+
+max         volume max de traitement de l'usine
+src         volume total capté par les sources
+real        volume total réellement traité

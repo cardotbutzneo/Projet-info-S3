@@ -15,6 +15,31 @@ verifDependance() {
     return 0
 }
 
+creerFichierData(){
+    local args=("max" "src" "real")
+    if [ -z "$1" ];then
+        echo "aucun fichier créer : argument manqant" >> output/stderr
+    fi
+    for arg in "${args[@]}";do
+        echo "$arg"
+        if [ "$1" = "$arg" ];then
+            echo "creation du fichier "$1".cvs" >> output/stdout
+            touch gnuplot/"$1".csv
+            $(ls output/stdout >& /dev/null)
+            if [ "$?" -ne 0 ];then
+                echo "Erreur : fichier non créer" >> stderr
+                return 1
+            else
+                echo "création du fichier réussi" >> output/stdout
+                return 0
+            fi
+        fi
+    done
+    echo "Erreur : argument non trouvé" >> output/stderr
+    return 1
+}
+
+
 BarreDeProgression() {
     local cmp=0
     local bar=""

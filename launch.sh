@@ -12,13 +12,14 @@ if [ "$1" = "-r" ] || [ "$1" = "--run" ];then
         echo "Vous compilez avec une ou plusieurs librairies manquantes (mode --force)."
         echo "Vous n'aurez donc pas accès à tout le code."
         verif_flag=1 #dépendance non installé, pas acces aux graphique
-    elif [ "$?" -eq 0 ];then
-        echo "Erreur : Il manque une ou plusieurs dépendances pour compiler."
-        echo "Utilisez l'option --force pour compiler malgré tout."
-        exit 1
-    else
-        verif_flag=0
     fi
+fi
+if [ "$?" -eq 1 ];then
+    echo "Erreur : Il manque une ou plusieurs dépendances pour compiler."
+    echo "Utilisez l'option --force pour compiler malgré tout."
+    exit 1
+else
+    verif_flag=0
 fi
 
 
@@ -58,6 +59,7 @@ elif [ "$1" = "--arbo" ] && [ "$#" -eq 1 ];then
     arboraissance
     exit 0
 elif [ "$1" = "histo" ] && [ $verif_flag -eq 0 ];then #non acces aux graphiques si gnuplot n'est pas installé
+    creerFichierData "$2"
     if [ "$2" = "max" ];then
     #fonction
     echo "appel de la fonction pour max"
