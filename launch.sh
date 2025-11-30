@@ -8,7 +8,7 @@ source ./bash/fonction.sh
 #on vérifit les dépendances avant le lancement
 verifDependance
 if [ "$1" = "-r" ] || [ "$1" = "--run" ];then
-    if { [ "$2" = "--force" ] || [ "$3" = "--force" ]; } && [ "$?" -eq 0 ];then
+    if { [ "$2" = "--force" ] || [ "$3" = "--force" ]; } && [ "$?" -eq 1 ];then
         echo "Vous compilez avec une ou plusieurs librairies manquantes (mode --force)."
         echo "Vous n'aurez donc pas accès à tout le code."
         verif_flag=1 #dépendance non installé, pas acces aux graphique
@@ -25,6 +25,11 @@ fi
 
 #éxécution du code si les conditions sont réuni
 
+if [ "$2" = "--help" ] || [ "$2" = "-h" ];then
+    aide "$1"
+    exit 0
+fi
+
 if [ "$1" = "-r" ] || [ "$1" = "--run" ]; then
     if [ "$#" -gt 1 ] && { [ "$2" != "--force" ] && [ "$3" != "--force" ]; }; then
         echo "Erreur : L'option '$1' ne doit pas être suivie d'autres arguments (sauf --force)." >&2
@@ -34,11 +39,7 @@ if [ "$1" = "-r" ] || [ "$1" = "--run" ]; then
         make
     fi
     exit 0
-fi
 
-if [ "$2" = "--help" ] || [ "$2" = "-h" ];then
-    aide "$1"
-    exit 0
 elif [ "$1" = "-c" ] || [ "$1" = "--clean" ]; then
     if [ "$2" != "-a" ] && [ "$2" != "--all" ] && [ -n "$2" ]; then
         echo "Erreur : l'option '$1' ne doit être suivie que par -a/--all ou aucun argument."
@@ -102,7 +103,7 @@ elif [ "$1" = "leaks" ];then
         exit 0
     fi
 elif [ -z "$1" ];then
-    echo "Erreur : le programme ne peut pas etre compiler sans option."
+    echo "Erreur : le programme ne peut pas etre compiler sans option." >> output/stderr
     echo "Ajouter -r ou --run pour compiler."
     echo "Exemple : ./launch -r [arg2] [arg3] ou ./launch --run [arg2] [arg3]"
     exit 1

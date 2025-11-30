@@ -1,0 +1,5 @@
+Utilisation : bash launch.sh -r/--run [option]
+
+Permet de compiler le projet selon les règles suivantes :
+[]              compile le projet sans restriction si toutes les bibliothèques sont incluses
+[--force]       compile le projet avec restriction aux graphiques suite à la non disponiblité de gnuplot.  

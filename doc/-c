@@ -1,0 +1,5 @@
+Utilisation : bash launch.sh -c/--clean [option]
+
+Permet de supprimer les fichiers obselètes suivants les règles suivantes :
+[]          supprime uniquement les fichiers de compilation (make clean)
+[-a/--all]  supprime les fichiers de compilation et les graphiques (make clean + rm graphique)
