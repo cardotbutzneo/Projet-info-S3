@@ -78,7 +78,7 @@ typedef struct Usager {
 typedef struct Usine {
     char* id;
     unsigned long capacite;
-    unsigned long v_max;
+    unsigned long v_traite;
     unsigned long v_capte;
 } Usine;
 
@@ -93,4 +93,5 @@ typedef struct AVL {
 
 typedef struct AVL* pAVL   */
 #endif
+
 
