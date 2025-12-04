@@ -103,9 +103,14 @@ void libererAVL(pAVL a){
     free(avl); 
 }
 
-
-
-
+void parcoursAVL(pAVL a){
+   if(a == NULL){
+      return;
+   }
+   printf("%s - Max : %lu; - Src : %u; - Real : %lu", a->usine->id; a->usine->capacite, a->usine->v_capte, a->usine->v_traite);
+   parcoursAVL(a->fd);
+   parcoursAVL(a->fg);
+}
 
 
 
