@@ -3,9 +3,9 @@
 #include "main.h"
 
 typedef struct{
-    char* Nom;
-    int a;
-}Struct;
+    char* cle;
+    unsigned long valeur;
+}Dictionnaire;
 
 
 typedef struct{
@@ -28,6 +28,7 @@ typedef struct AVL* pAVL;
 
 
 #endif
+
 
 
 
