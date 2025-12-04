@@ -83,16 +83,16 @@ elif [ "$1" = "histo" ] && [ $verif_flag -eq 0 ];then #non acces aux graphiques 
     if [ "$2" = "max" ];then
     #fonction
         echo "appel de la fonction pour max"
-        gnuplot -c gnuplot/test.gp max
+        gnuplot -c gnuplot/run.gp max
         exit 0
     elif [ "$2" = "src" ];then
-    echo "appel de la fonction pour src"
+        echo "appel de la fonction pour src"
     #fonction
     exit 0
     elif [ "$2" = "real" ];then
-    echo "appel de la fonction pour real"
-    #fonction
-    exit 0
+        echo "appel de la fonction pour real"
+        #fonction
+        exit 0
     fi
 elif [ "$1" = "leaks" ];then
     if [ -z "$2" ];then
