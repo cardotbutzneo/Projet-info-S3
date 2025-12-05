@@ -121,7 +121,6 @@ erreur(){
         return 1
     fi
     
-    # Vérification que l'argument est un entier entre 1 et 5
     if ! [[ $1 =~ ^[1-5]$ ]]; then
         echo "Erreur : l'argument doit être un nombre entre 1 et 5"
         return 1
