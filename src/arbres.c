@@ -113,6 +113,64 @@ void parcoursAVL(pAVL a){
 }
 */
 
+int hauteur(pAVL a){
+   if (a == NULL){
+      return 0;
+   }
+   int hd = hauteur(a->fd);
+   int hg = hauteur(a->fg);
+   if(hd > hg){
+      return 1+hd;
+   } else {
+      return 1+hg;
+   }
+}
+
+pAVL recherche(pAVL a, char* id){
+    if(a == NULL){
+        return NULL;
+    }
+    int comparateur=strcmp(id, a->usine->id);
+    if(comparateur == 0){
+        return a;
+    }
+    if(comparateur < 0){
+        return recherche(a->fg, id);
+    } else {
+        return recherche(a->fd, id);
+    }
+}
+
+pAVL insertionAVL(pAVL a, pUsine usine, int *h){
+    if (a == NULL){
+        *h=1;
+        return creerAVL(usine);
+    }
+    else if (strcmp(a->usine->id, usine->id) < 0){
+        a->fg=insertionAVL(a->fg, usine, h);
+        *h=-*h;
+    }
+    else if (strcmp(a->usine->id, usine->id) > 0){
+        a->fd=insertionAVL(a->fd, usine, h);
+    } else {
+        *h=0;
+        return a;
+    }
+    if(*h != 0){
+        a->eq += *h;
+        a=equilibrerAVL(a);
+        if(a->eq == 0){
+            *h=0;
+        } else {
+            *h=1;
+        }
+    }
+    return a;
+}
+
+
+
+
 
 
 
