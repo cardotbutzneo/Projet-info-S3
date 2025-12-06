@@ -82,3 +82,11 @@ Token_liste* ouvrir_fichier(const char* nom_fichier){
     fclose(f);
     return liste;
 }
+
+void libérer_token(Token_liste* liste){
+    while (liste){
+        Token_liste* f = liste;
+        liste = liste->suivant;
+        free(f);
+    }
+}

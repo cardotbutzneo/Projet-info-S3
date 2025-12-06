@@ -157,5 +157,3 @@ trie(){
         fi
     done
 }
-
-trie

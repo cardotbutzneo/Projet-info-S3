@@ -10,6 +10,7 @@ int main(int argc, char* argsv[])
         printf("type : %s\n",temp->token);
         temp = temp->suivant;
     }
-    
+    libérer_token(valeurs);
+    printf("Mémoire libérée\n");
     return 0;
 }

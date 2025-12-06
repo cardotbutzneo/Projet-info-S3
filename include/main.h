@@ -17,5 +17,6 @@
 
 // fonctions
 Token_liste* ouvrir_fichier(const char* nom_fichier);
+void libérer_token(Token_liste* liste);
 
 #endif
