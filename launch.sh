@@ -37,6 +37,7 @@ if [ "$1" = "-r" ] || [ "$1" = "--run" ]; then
         exit 1
     else
         make
+        ./main 
     fi
     exit 0
 
