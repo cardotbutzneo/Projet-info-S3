@@ -127,38 +127,27 @@ int hauteur(pAVL a){
    }
 }
 
-int recherche_i(pAVL a, char* id){
-    if(a == NULL){
-        return 0;
-    }
-    trim(id);
-    trim(a->usine->id);
-    printf("id '%s' usine vs id '%s'\n",a->usine->id,id);
-    int comparateur=strcmp(id, a->usine->id);
-    if(comparateur < 0){
-        return recherche_i(a->fg, id);
-    } 
-    if(comparateur == 0){
-        return 1;
-    }
-    else {
-        return recherche_i(a->fd, id);
-    }
+int recherche_i(pAVL avl, char* id){
+    if (!avl || !id) return 0;
+    int comparaison = strcmp(avl->usine->id,id); // ligne de mort
+    printf(" id lu : '%s' vs '%s' c : %d\n",id,avl->usine->id,comparaison);
+    if (comparaison < 0) recherche_i(avl->fg,id);
+    else if (comparaison == 0) return 1;
+    else recherche_i(avl->fd,id);
+    return 0;
 }
 
-pAVL recherche(pAVL a, char* id) {
-    if (!a || !id) return NULL;
+pAVL recherche(pAVL a, const char* id) {
+    if (!id) return NULL;
 
-    // Nettoyer les deux chaînes
-    trim(id);
-    trim(a->usine->id);
-
-    int cmp = strcmp(id, a->usine->id);
-
-    if (cmp == 0) return a;
-    else if (cmp < 0) return recherche(a->fg, id);
-    else return recherche(a->fd, id);
+    while (a) {
+        int cmp = strcmp(id, a->usine->id);
+        if (cmp == 0) return a;
+        a = (cmp < 0) ? a->fg : a->fd;
+    }
+    return NULL;
 }
+
 
 pAVL insertionAVL(pAVL a, pUsine usine, int *h){
     if (a == NULL){
@@ -192,7 +181,7 @@ void afficherAVL(pAVL avl, int* cmp){
     afficherAVL(avl->fg,cmp);
     printf("====================\n");
     if (cmp) printf("\033[31mNoeud n°%d\033[0m\n",*cmp);
-    printf("Id : %s\n",avl->usine->id);
+    printf("Id : '%s'\n",avl->usine->id);
     printf("Capacité : %lu\n",avl->usine->capacite);
     printf("Volume capté : %lu\n",avl->usine->v_capte);
     printf("Volume traité : %lu\n",avl->usine->v_traite);

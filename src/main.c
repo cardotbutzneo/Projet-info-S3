@@ -10,7 +10,7 @@ int main(int argc, char* argsv[])
     printf("lecture réussie\n");
     afficherAVL(avl,&i);
     printf("id : %s\n",avl->usine->id);
-    remplirAVL(avl);
+    //remplirAVL(avl);
     switch (recherche_i(avl,"CE100000E")){ // exemple de recherche de noeud
         case 1:
             printf("Id trouvé\n");
@@ -18,6 +18,12 @@ int main(int argc, char* argsv[])
         default:
             printf("Id non trouvé\n");
             break;
+    }
+    if (recherche(avl,"CE100000E")){
+        printf("Id trouvé\n");
+    }
+    else {
+        printf("Id non trouvé\n");
     }
     i=1;
     afficherAVL(avl,&i);

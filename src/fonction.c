@@ -174,8 +174,9 @@ void remplirAVL(pAVL avl) {
         trim(id_token);
 
         pAVL usineptr = recherche(avl, id_token);
-        if (usineptr) printf("ID de l'usine lu : %s\n",usineptr->usine->id);
+        printf("ID de l'usine lu : %s\n",id_token);
         if (!usineptr) {
+            printf("Erreur de mémoire sur %s\n",id_token);
             free(id_token);
             continue; // passer à la ligne suivante
         }
