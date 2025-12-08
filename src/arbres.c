@@ -131,6 +131,9 @@ int recherche_i(pAVL a, char* id){
     if(a == NULL){
         return 0;
     }
+    trim(id);
+    trim(a->usine->id);
+    printf("id '%s' usine vs id '%s'\n",a->usine->id,id);
     int comparateur=strcmp(id, a->usine->id);
     if(comparateur < 0){
         return recherche_i(a->fg, id);
@@ -143,19 +146,18 @@ int recherche_i(pAVL a, char* id){
     }
 }
 
-pAVL recherche(pAVL a, char* id){
-    if(a == NULL){
-        return NULL;
-    }
-    int comparateur=strcmp(id, a->usine->id);
-    if(comparateur == 0){
-        return a;
-    }
-    if(comparateur < 0){
-        return recherche(a->fg, id);
-    } else {
-        return recherche(a->fd, id);
-    }
+pAVL recherche(pAVL a, char* id) {
+    if (!a || !id) return NULL;
+
+    // Nettoyer les deux chaînes
+    trim(id);
+    trim(a->usine->id);
+
+    int cmp = strcmp(id, a->usine->id);
+
+    if (cmp == 0) return a;
+    else if (cmp < 0) return recherche(a->fg, id);
+    else return recherche(a->fd, id);
 }
 
 pAVL insertionAVL(pAVL a, pUsine usine, int *h){
@@ -185,9 +187,15 @@ pAVL insertionAVL(pAVL a, pUsine usine, int *h){
     return a;
 }
 
-void afficherAVL(pAVL avl){
+void afficherAVL(pAVL avl, int* cmp){
     if (!avl) return;
-    afficherAVL(avl->fg);
+    afficherAVL(avl->fg,cmp);
+    printf("====================\n");
+    if (cmp) printf("\033[31mNoeud n°%d\033[0m\n",*cmp);
     printf("Id : %s\n",avl->usine->id);
-    afficherAVL(avl->fd);
+    printf("Capacité : %lu\n",avl->usine->capacite);
+    printf("Volume capté : %lu\n",avl->usine->v_capte);
+    printf("Volume traité : %lu\n",avl->usine->v_traite);
+    *cmp += 1;
+    afficherAVL(avl->fd,cmp);
 }

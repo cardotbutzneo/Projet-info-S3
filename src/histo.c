@@ -3,17 +3,21 @@
 #include "../include/fonction.h"
 #include <string.h>
 
-char* extraireID(const char* token) {
-    if (!token) return NULL;
+char* extraireID(const char* texte) {
+    const char* pos = strchr(texte, '#');
+    if (!pos) return NULL;
+    pos++; // après '#'
 
-    // Cherche le caractère '#'
-    char* pos = strchr(token, '#');
-    if (!pos) {
-        return strdup(token);  // pas de #
-    }
+    const char* fin = pos;
+    while (*fin && *fin != ' ' && *fin != ';' && *fin != '\n' && *fin != '\r') fin++;
 
-    return strdup(pos + 1); // # dans le token
+    size_t taille = fin - pos;
+    char* id = malloc(taille+1);
+    memcpy(id, pos, taille);
+    id[taille] = '\0';
+    return id;
 }
+
 
 void recuperersource(char* sauvegarde[5], char* ligne) {
     char* temp = strdup(ligne);   // duplique la ligne pour que strtok puisse la modifier

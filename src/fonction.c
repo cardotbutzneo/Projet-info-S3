@@ -90,7 +90,7 @@ Token_liste* ouvrir_fichier(const char* nom_fichier){
 }
 */
 
-void lireFichier(const char* chemin_fichier, pAVL *avl){ // lit une ligne et l'ajoute dans l'avl
+void lireFichier(const char* chemin_fichier, pAVL *avl) {
     if (!chemin_fichier) {
         printErreur("Impossible de connaitre l'emplacement du fichier\n");
         return;
@@ -107,6 +107,8 @@ void lireFichier(const char* chemin_fichier, pAVL *avl){ // lit une ligne et l'a
     char buffer[256];
     while (fgets(buffer, sizeof(buffer), f)) {
 
+        trim(buffer); // enlever espaces et \n de la ligne entière
+
         pUsine usine = malloc(sizeof(Usine));
         if (!usine) { fclose(f); return; }
 
@@ -114,10 +116,12 @@ void lireFichier(const char* chemin_fichier, pAVL *avl){ // lit une ligne et l'a
         int i = 0;
 
         while (token) {
+            trim(token); // sécuriser chaque token
             switch (i) {
                 case 1: {
                     char* tmp = extraireID(token);
-                    //printf("ID : %s\n",tmp); // débeugage
+                    if (!tmp) break;
+                    trim(tmp);
                     usine->id = strdup(tmp);
                     free(tmp);
                     break;
@@ -126,7 +130,6 @@ void lireFichier(const char* chemin_fichier, pAVL *avl){ // lit une ligne et l'a
                     usine->v_traite = atoi(token);
                     break;
             }
-
             token = strtok(NULL, ";");
             i++;
         }
@@ -136,7 +139,78 @@ void lireFichier(const char* chemin_fichier, pAVL *avl){ // lit une ligne et l'a
 
     fclose(f);
 }
-   
+
+void remplirAVL(pAVL avl) {
+    if (!avl) {
+        printErreur("Erreur : AVL non initialisé\n");
+        return;
+    }
+
+    FILE *f = fopen("gnuplot/data/source.dat", "r");
+    if (!f) {
+        printErreur("Erreur : impossible d'ouvrir le fichier .dat\n");
+        return;
+    }
+
+    char buffer[256];
+
+    while (fgets(buffer, sizeof(buffer), f)) {
+        trim(buffer); // enlever espaces et \n de la ligne entière
+
+        // Tokens
+        char* token = strtok(buffer, ";");
+        if (!token) continue; // ignorer ligne vide
+
+        token = strtok(NULL, ";"); // 2e token à ignorer
+        if (!token) continue;
+        trim(token);
+
+        token = strtok(NULL, ";"); // 3e token : ID de l'usine
+        if (!token) continue;
+        trim(token);
+
+        char* id_token = extraireID(token);
+        if (!id_token) continue;
+        trim(id_token);
+
+        pAVL usineptr = recherche(avl, id_token);
+        if (usineptr) printf("ID de l'usine lu : %s\n",usineptr->usine->id);
+        if (!usineptr) {
+            free(id_token);
+            continue; // passer à la ligne suivante
+        }
+
+        token = strtok(NULL, ";"); // volume capté
+        if (token) {
+            trim(token);
+            usineptr->usine->v_capte += atoi(token);
+        }
+
+        float v_capte = usineptr->usine->v_capte;
+        printf("v : %f\n",v_capte);
+        token = strtok(NULL, ";"); // % perte
+        if (token) {
+            trim(token);
+            usineptr->usine->v_traite = v_capte * (1.0 - atof(token));
+        }
+
+        free(id_token);
+    }
+
+    fclose(f);
+}
+
+
+
+void trim(char* str) {
+    if (!str) return;
+    // supprime espaces et \n en fin
+    size_t len = strlen(str);
+    while(len > 0 && (str[len-1]=='\n' || str[len-1]==' ' || str[len-1]=='\r'))
+        str[--len] = '\0';
+}
+
+
 
 /*
 void libérer_token(Token_liste* liste){

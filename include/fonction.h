@@ -7,6 +7,7 @@
 void printErreur(const char *format);
 void récupérer_max(pAVL avl, Dictionnaire dict[MAX_CMP], int* cmp_max);
 void récupérer_max(pAVL avl, Dictionnaire dict[MAX_CMP], int* cmp_max);
-//Token_liste* ouvrir_fichier(const char* nom_fichier);
+void remplirAVL(pAVL avl);
 void lireFichier(const char* chemin_fichier, pAVL *avl);
+void trim(char* str); // made by chatpgt
 #endif

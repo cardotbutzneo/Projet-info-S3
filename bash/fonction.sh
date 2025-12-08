@@ -122,23 +122,23 @@ filtrage() {
     fi
     case "$1" in
         usine)
-            grep -E "^-;[^-;]+;-;[^;]*;[^;]*" ./c-wildwater_v0.dat >> gnuplot/data/usine.dat
+            grep -E "^-;[^-;]+;-;[^;]*;[^;]*" ./c-wildwater_v0.dat > gnuplot/data/usine.dat
             #./main usine
             ;;
         jonction)
-            grep -E "^[^;]*;Junction #[A-Z0-9]+;Service #[A-Z0-9]+;-;" ./c-wildwater_v0.dat >> gnuplot/data/jonction.dat
+            grep -E "^[^;]*;Junction #[A-Z0-9]+;Service #[A-Z0-9]+;-;" ./c-wildwater_v0.dat > gnuplot/data/jonction.dat
             #./main jonction
             ;;
         stockage)
-            grep -E "^-;[^-;]*;[^-;]*;-;[^-;]*" ./c-wildwater_v0.dat >> gnuplot/data/stockage.dat
+            grep -E "^-;[^-;]*;[^-;]*;-;[^-;]*" ./c-wildwater_v0.dat > gnuplot/data/stockage.dat
             #./main stockage
             ;;
         raccordement)
-            grep -E "^[^;]*;Service #[A-Z0-9]+;Cust #[A-Z0-9]+;-;[^;]*" ./c-wildwater_v0.dat >> gnuplot/data/raccordement.dat
+            grep -E "^[^;]*;Service #[A-Z0-9]+;Cust #[A-Z0-9]+;-;[^;]*" ./c-wildwater_v0.dat > gnuplot/data/raccordement.dat
             #./main raccordement
             ;;
         source)
-            grep -E "^-;[^;]*;[^;]*;[^;]*;[^;]*" ./c-wildwater_v0.dat >> gnuplot/data/source.dat
+            grep -E "^-;[^;]*;[^;]*;[^;]*;[^;]*" ./c-wildwater_v0.dat > gnuplot/data/source.dat
             #./main source
             ;;
         *)
