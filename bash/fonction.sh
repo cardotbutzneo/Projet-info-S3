@@ -138,7 +138,7 @@ filtrage() {
             #./main raccordement
             ;;
         source)
-            grep -E "^-;[^;]*;[^;]*;[^;]*;[^;]*" ./c-wildwater_v0.dat > gnuplot/data/source.dat
+            grep -E "^-;[^;]*;[^-;]*;[^-;]*;[^;]*" ./c-wildwater_v0.dat > gnuplot/data/source.dat
             #./main source
             ;;
         *)
