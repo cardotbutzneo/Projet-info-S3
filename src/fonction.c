@@ -174,9 +174,9 @@ void remplirAVL(pAVL avl) {
         trim(id_token);
 
         pAVL usineptr = recherche(avl, id_token);
-        printf("ID de l'usine lu : %s\n",id_token);
+        //printf("ID de l'usine lu : %s\n",id_token);
         if (!usineptr) {
-            printf("Erreur de mémoire sur %s\n",id_token);
+            //printf("Erreur de mémoire sur %s\n",id_token);
             free(id_token);
             continue; // passer à la ligne suivante
         }
@@ -188,11 +188,11 @@ void remplirAVL(pAVL avl) {
         }
 
         float v_capte = usineptr->usine->v_capte;
-        printf("v : %f\n",v_capte);
+        //printf("volume capté par l'usine : '%s' : %lf\n\n",id_token,atof(token));
         token = strtok(NULL, ";"); // % perte
         if (token) {
             trim(token);
-            usineptr->usine->v_traite = v_capte * (1.0 - atof(token));
+            usineptr->usine->capacite = v_capte * (1.0 - atof(token));
         }
 
         free(id_token);

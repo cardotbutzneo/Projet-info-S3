@@ -1,5 +1,6 @@
 #include "main.h"
 #include "arbres.h"
+#include "couleurs.h"
 #include <string.h>
 pAVL creerAVL(pUsine usine) {
   if (usine == NULL){
@@ -128,23 +129,34 @@ int hauteur(pAVL a){
 }
 
 int recherche_i(pAVL avl, char* id){
-    if (!avl || !id) return 0;
+    if (!avl || !id){
+        printf("pointeur NULL\n");
+        return 0;
+    }
     int comparaison = strcmp(avl->usine->id,id); // ligne de mort
-    printf(" id lu : '%s' vs '%s' c : %d\n",id,avl->usine->id,comparaison);
-    if (comparaison < 0) recherche_i(avl->fg,id);
-    else if (comparaison == 0) return 1;
-    else recherche_i(avl->fd,id);
-    return 0;
+    //printf(" id lu : '%s' vs '%s'\n",id,avl->usine->id);
+    //if (avl->fg) printf("id du fils gauche : '%s'\n",avl->fg->usine->id);
+    //if (avl->fd) printf("id du fils droit : '%s'\n",avl->fd->usine->id);
+    //printf("c : %d\n",comparaison);
+    if (comparaison == 0) return 1;
+    if (comparaison < 0) return recherche_i(avl->fg,id);
+    else return recherche_i(avl->fd,id);
+    return -1;
 }
 
 pAVL recherche(pAVL a, const char* id) {
-    if (!id) return NULL;
-
-    while (a) {
-        int cmp = strcmp(id, a->usine->id);
-        if (cmp == 0) return a;
-        a = (cmp < 0) ? a->fg : a->fd;
+    if (!a || !id){
+        //printf("Erreur\n");
+        return NULL;
     }
+    int comparateur = strcmp(id,a->usine->id);
+    //printf(" id lu : '%s' vs '%s'\n",a->usine->id,id);
+    //if (a->fg) printf("id du fils gauche : '%s'\n",a->fg->usine->id);
+    //if (a->fd) printf("id du fils droit : '%s'\n",a->fd->usine->id);
+    //printf("c : %d\n",comparateur);
+    if (comparateur == 0) return a;
+    if (comparateur > 0) return recherche(a->fg,id);
+    else return recherche(a->fd,id);
     return NULL;
 }
 
@@ -176,15 +188,20 @@ pAVL insertionAVL(pAVL a, pUsine usine, int *h){
     return a;
 }
 
-void afficherAVL(pAVL avl, int* cmp){
+void afficherAVL(pAVL avl, int *cmp){
     if (!avl) return;
-    afficherAVL(avl->fg,cmp);
-    printf("====================\n");
-    if (cmp) printf("\033[31mNoeud n°%d\033[0m\n",*cmp);
-    printf("Id : '%s'\n",avl->usine->id);
-    printf("Capacité : %lu\n",avl->usine->capacite);
-    printf("Volume capté : %lu\n",avl->usine->v_capte);
-    printf("Volume traité : %lu\n",avl->usine->v_traite);
-    *cmp += 1;
-    afficherAVL(avl->fd,cmp);
+
+    afficherAVL(avl->fg, cmp);
+    printf("==========================\n");
+
+    if (cmp) {
+        printf(ROUGE"Noeud n°%d\033[0m\n"RESET, *cmp);
+        (*cmp)++;
+    }
+    printf("Id             : '%s'\n", avl->usine->id);
+    printf("Capacité       : %.3e m³\n",(double)avl->usine->capacite);
+    printf("Volume capté   : %.3e m³\n", (double)avl->usine->v_capte);
+    printf("Volume traité  : %.3e m³\n", (double)avl->usine->v_traite);
+
+    afficherAVL(avl->fd, cmp);
 }
