@@ -139,7 +139,7 @@ int recherche_i(pAVL avl, char* id){
     //if (avl->fd) printf("id du fils droit : '%s'\n",avl->fd->usine->id);
     //printf("c : %d\n",comparaison);
     if (comparaison == 0) return 1;
-    if (comparaison < 0) return recherche_i(avl->fg,id);
+    if (comparaison > 0) return recherche_i(avl->fg,id);
     else return recherche_i(avl->fd,id);
     return -1;
 }
@@ -155,7 +155,7 @@ pAVL recherche(pAVL a, const char* id) {
     //if (a->fd) printf("id du fils droit : '%s'\n",a->fd->usine->id);
     //printf("c : %d\n",comparateur);
     if (comparateur == 0) return a;
-    if (comparateur > 0) return recherche(a->fg,id);
+    if (comparateur < 0) return recherche(a->fg,id);
     else return recherche(a->fd,id);
     return NULL;
 }
@@ -166,11 +166,11 @@ pAVL insertionAVL(pAVL a, pUsine usine, int *h){
         *h=1;
         return creerAVL(usine);
     }
-    else if (strcmp(a->usine->id, usine->id) < 0){
+    if (strcmp(usine->id, a->usine->id) < 0){
         a->fg=insertionAVL(a->fg, usine, h);
         *h=-*h;
     }
-    else if (strcmp(a->usine->id, usine->id) > 0){
+    else if (strcmp(usine->id, a->usine->id) > 0){
         a->fd=insertionAVL(a->fd, usine, h);
     } else {
         *h=0;

@@ -14,6 +14,7 @@ int main(int argc, char* argsv[])
     //printf("id : %s\n",avl->usine->id);
     remplirAVL(avl);
     int n = recherche_i(avl,"CE100000E");
+    printf("n : %d",n);
     printf("====================\n");
     if (n == 1) printf("Id trouvé\n");
     else printf("Id non trouvé\n");
