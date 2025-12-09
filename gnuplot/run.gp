@@ -1,16 +1,17 @@
-# Séparateur des données
 set datafile separator ";"
 
-# Configuration du graphique
-set title "Histogramme des données"
-set xlabel "Valeurs"
-set ylabel "Fréquence"
-set boxwidth 0.8
-set style fill solid 0.5 border -1
+set title "Volume par usine"
+set xlabel "Usines"
+set ylabel "Volume"
 
-# Configuration du terminal et du fichier de sortie
-set terminal pngcairo size 800,600 enhanced font 'Verdana,10'
-set output "gnuplot/graphique/graphique.png"
+set style data boxes
+set style fill solid 0.6 border -1
+set boxwidth 0.6
 
-# Tracé de l'histogramme (colonne 4)
-plot "gnuplot/data/usine.dat" using 4:(1) smooth frequency with boxes title "Histogramme"
+set terminal pngcairo size 900,600 enhanced font "Verdana,10"
+set output "gnuplot/graphique/volume_usines.png"
+
+# Important : catégories en abscisse
+set xtics rotate by -45
+
+plot "gnuplot/data/usine_max.dat" using 2:xtic(1) title "Volume"

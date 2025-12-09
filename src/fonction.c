@@ -14,7 +14,7 @@ void printErreur(const char *msg) {
     fprintf(stderr, "[%s] Erreur : %s\n", champ_date, msg);
 }
 
-// made by chatgpt
+// made by chatgpt (j'ai compris !)
 // Fonction utilitaire pour trouver l'index de la valeur extrême dans le tableau
 int indexExtreme(Dictionnaire *tab, int n, int max) {
     int idx = 0;
@@ -26,29 +26,32 @@ int indexExtreme(Dictionnaire *tab, int n, int max) {
 }
 
 // Fonction de parcours AVL pour remplir le top n de manière optimisée
-void remplirTopN(pAVL avl, Dictionnaire *top, int n, int *count, char *critere, int max) {
+void remplirTopN(pAVL avl, Dictionnaire *top, int n, int *cmp, char *critere, int max) {
     if (!avl) return;
 
     // Parcours gauche et droite pour couvrir tout l'AVL
-    remplirTopN(avl->fg, top, n, count, critere, max);
+    remplirTopN(avl->fg, top, n, cmp, critere, max);
 
     // Récupérer la valeur selon le critère
-    double val;
-    if (strcmp(critere, "capacite") == 0)
+    unsigned long val; //stocke la valeur par laquelle on doit comparer
+    if (strcmp(critere, "capacite") == 0){
         val = avl->usine->capacite;
-    else if (strcmp(critere, "v_capte") == 0)
+    }
+    else if (strcmp(critere, "v_capte") == 0){
         val = avl->usine->v_capte;
-    else if (strcmp(critere, "v_traite") == 0)
+    }
+    else if (strcmp(critere, "v_traite") == 0){
         val = avl->usine->v_traite;
-    else
-        val = 0;
+    }
+    else val = 0;
 
-    if (*count < n) {
-        // Remplir le tableau jusqu'à n éléments
-        strcpy(top[*count].id, avl->usine->id);
-        top[*count].valeur = val;
-        (*count)++;
-    } else {
+    if (*cmp < n) {
+        // Remplir le tableau jusqu'à n éléments 
+        strcpy(top[*cmp].id, avl->usine->id);
+        top[*cmp].valeur = val;
+        (*cmp)++;
+    } 
+    else {
         // Remplacer la valeur extrême si nécessaire
         int idx = indexExtreme(top, n, max); // index de la plus petite (max=1) ou plus grande (max=0)
         if ((max && val > top[idx].valeur) || (!max && val < top[idx].valeur)) {
@@ -57,11 +60,11 @@ void remplirTopN(pAVL avl, Dictionnaire *top, int n, int *count, char *critere, 
         }
     }
 
-    remplirTopN(avl->fd, top, n, count, critere, max);
+    remplirTopN(avl->fd, top, n, cmp, critere, max);
 }
 
 // Fonction principale
-Dictionnaire* nUsinesOptimise(pAVL avl, int n, char *critere, int max, int *taille) {
+Dictionnaire* nUsinesOptimise(pAVL avl, int n, char *critere, int max, int *taille) { // n : taille du tableau final
     if (!avl || n <= 0) return NULL;
 
     Dictionnaire *top = malloc(sizeof(Dictionnaire) * n);
@@ -74,6 +77,9 @@ Dictionnaire* nUsinesOptimise(pAVL avl, int n, char *critere, int max, int *tail
     return top;
 }
 // end
+
+
+
 /*
 void récupérer_max(pAVL avl, Dictionnaire dict[MAX_CMP], int* cmp_max) { // récupère le max dans l'ABR par un parcourt infix inverse
     if (!avl || !dict || !cmp_max || *cmp_max >= MAX_CMP) {
@@ -262,6 +268,26 @@ void remplirAVL(pAVL avl) {
     fclose(f);
 }
 
+void ecrireUsine(Dictionnaire *dict, int taille, char destination[64]){
+    if (!dict || taille <= 0) return;
+
+    // Fichier par défaut
+    if (destination[0] == '\0') {
+        strcpy(destination, "gnuplot/data/usine_max.dat");
+    }
+
+    FILE *f = fopen(destination, "w");
+    if (!f) {
+        printErreur("Erreur : Impossible d'ouvrir le fichier de destination\n");
+        return;
+    }
+
+    for (int i = 0; i < taille; i++) {
+        fprintf(f, "%s;%lu\n", dict[i].id, dict[i].valeur);
+    }
+
+    fclose(f);
+}
 
 
 void trim(char* str) {

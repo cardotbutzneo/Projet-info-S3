@@ -11,4 +11,5 @@ Dictionnaire* nUsinesOptimise(pAVL avl, int n, char *critere, int max, int *tail
 void remplirAVL(pAVL avl);
 void lireFichier(const char* chemin_fichier, pAVL *avl);
 void trim(char* str); // made by chatpgt
+void ecrireUsine(Dictionnaire *dict, int taille, char destination[64]);
 #endif

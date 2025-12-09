@@ -31,13 +31,15 @@ int main(int argc, char* argsv[])
     printf("Affichage après remplissage\n");
     afficherAVL(avl,&i);
     int taille;
-    Dictionnaire *top5 = nUsinesOptimise(avl, 1, "v_traite", 1, &taille); // max=1 pour top 5
+    Dictionnaire *top = nUsinesOptimise(avl, 3, "v_traite", 1, &taille); // max=1 pour top 5
 
     printf("Top %d usines par volume traité :\n", taille);
     for (int i = 0; i < taille; i++) {
-        printf("%s : %.2ld\n", top5[i].id, top5[i].valeur);
+        printf("%s : %.2ld\n", top[i].id, top[i].valeur);
     }
-    free(top5);
+    char chemin[64] = "";
+    ecrireUsine(top,taille,chemin);
+    free(top);
 
     libererAVL(avl);
     printf("Mémoire libérée\n");
