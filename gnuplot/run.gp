@@ -2,7 +2,7 @@ set datafile separator ";"
 
 set title "Volume par usine"
 set xlabel "Usines"
-set ylabel "Volume (m³)"
+set ylabel "Volume (k.m³)"
 
 set style data boxes
 set boxwidth 0.6
@@ -11,7 +11,9 @@ set style fill solid 0.7 border -1
 set xtics rotate by -45
 set key outside right top
 set rmargin 12
-
+set yrange [0:*]
+set xtics nomirror
+set xtics nomirror
 set terminal pngcairo size 1200,600 enhanced font "Verdana,10"
 
 set style increment userstyles
@@ -31,4 +33,5 @@ plot "gnuplot/data/usine_max.dat" using 2:xtic(1) with boxes ls 1 title "Max"
 
 # -------- Graphique MIN --------
 set output sprintf("gnuplot/graphique/volume_min_usines_%s.png", ARG1)
+set yrange [1080:*]
 plot "gnuplot/data/usine_min.dat" using 2:xtic(1) with boxes ls 2 title "Min"
