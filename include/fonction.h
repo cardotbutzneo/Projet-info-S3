@@ -13,4 +13,6 @@ void remplirAVL(pAVL avl);
 void lireFichier(const char* chemin_fichier, pAVL *avl);
 void trim(char* str); // made by chatpgt
 void ecrireUsine(Dictionnaire *dict, int taille, char destination[64], int type);
+void jolieAffichage(Dictionnaire* dict, int type, int taile, char* critere);
+void afficherDict(Dictionnaire* dict, int taille);
 #endif

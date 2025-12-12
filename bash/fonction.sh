@@ -122,7 +122,7 @@ filtrage() {
     fi
     case "$1" in
         usine)
-            grep -E "^-;[^-;]+;-;[^;]*;[^;]*" ./c-wildwater_v0.dat > gnuplot/data/usine.dat
+            grep -E "^-;[^-;]+;-;[^;]*;[^;]*" ./c-wildwater_v3.dat > gnuplot/data/usine.dat
             #./main usine
             ;;
         jonction)
@@ -138,7 +138,7 @@ filtrage() {
             #./main raccordement
             ;;
         source)
-            grep -E "^-;[^;]*;[^-;]*;[^-;]*;[^;]*" ./c-wildwater_v0.dat > gnuplot/data/source.dat
+            grep -E "^-;[^;]*;[^-;]*;[^-;]*;[^;]*" ./c-wildwater_v3.dat > gnuplot/data/source.dat
             #./main source
             ;;
         *)
@@ -148,12 +148,10 @@ filtrage() {
     esac
 }
 trie(){
-    liste_trie=("usine" "jonction" "stockage" "raccordement" "source")
+    liste_trie=("usine" "source")
     for trie in "${liste_trie[@]}";do
         fichier="gnuplot/data/{$trie}.dat"
-        if [ ! -f "$fichier" ];then
-            filtrage "$trie"
-        fi
+        filtrage "$trie"
     done
 }
 

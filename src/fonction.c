@@ -285,7 +285,7 @@ void ecrireUsine(Dictionnaire *dict, int taille, char destination[64], int type)
     else if (destination[0] == '\0' && type == 0){
         strcpy(destination, "gnuplot/data/usine_min.dat");
     }
-    printf("destination : %s\n",destination);
+    
     FILE *f = fopen(destination, "w");
     if (!f) {
         printErreur("Erreur : Impossible d'ouvrir le fichier de destination\n");
@@ -308,3 +308,35 @@ void trim(char* str) {
         str[--len] = '\0';
 }
 
+void afficherDict(Dictionnaire* dict, int taille){
+    for (int i=0;i<taille;i++){
+        printf("cle : %s, valeur : %lu\n",dict[i].id,dict[i].valeur);
+    }
+}
+
+void jolieAffichage(Dictionnaire* dict, int type, int taille, char* critere) {
+    if (!dict || !critere || taille <= 0) {
+        printf("Erreur : dictionnaire vide ou critère invalide.\n");
+        return;
+    }
+
+    printf("Affichage des %d usines (%s)\n\n", taille, type ? "max" : "min");
+
+    unsigned long max_val = dict[taille - 1].valeur;
+
+    for (int i = 0; i < taille; i++) {
+        float ratio = (float)dict[i].valeur / max_val;
+        int blocks = (int)(ratio * 20);  // 20 blocs = barre pleine
+        if (i!=0 && i!=taille-1){
+            printf(JAUNE"=======================================================\n"RESET);
+        }
+        printf(VIOLET"critère de trie : %s\n",critere);
+        printf(BLEU "Usine %s\n" RESET, dict[i].id);
+        printf(ROUGE "  Volume : %lu\n" RESET, dict[i].valeur);
+
+        printf("  Taux de remplissage : [");
+        for (int j = 0; j < blocks; j++) printf("#");
+        for (int j = blocks; j < 20; j++) printf("-");
+        printf("]  "JAUNE"(%.1f%%)\n\n"RESET, ratio * 100);
+    }
+}

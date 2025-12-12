@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <string.h>
 
 // include librairie perso
 #include "arbres.h"
@@ -17,7 +18,5 @@
 // structures
 
 // fonctions
-Token_liste* ouvrir_fichier(const char* nom_fichier);
-void libérer_token(Token_liste* liste);
 
 #endif
