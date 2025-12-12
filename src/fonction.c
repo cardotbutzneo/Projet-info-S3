@@ -40,9 +40,9 @@ void remplirTopN(pAVL avl, pUsine* top, int n, int *cmp, char *critere, int max)
 
     remplirTopN(avl->fg, top, n, cmp, critere, max);
 
-    int crit = (strcmp(critere, "capacite") == 0) ? 0 :
-               (strcmp(critere, "v_capte") == 0) ? 1 :
-               (strcmp(critere, "v_traite") == 0) ? 2 : -1;
+    int crit = (strcmp(critere, "max") == 0) ? 0 :
+               (strcmp(critere, "src") == 0) ? 1 :
+               (strcmp(critere, "real") == 0) ? 2 : -1;
 
     unsigned long val =
         (crit == 0) ? avl->usine->capacite :
@@ -245,8 +245,12 @@ void ecrireUsine(pUsine *dict, int taille, char destination[64], int type){ // (
 
     for (int i = 0; i < taille; i++) { // méthode d'écriture : id;capacite;v_capte;v_traite
         if (dict[i]) if (dict[i]->capacite > 0 && dict[i]->v_capte > 0 && dict[i]->v_traite > 0){
-            unsigned long capa = dict[i]->capacite;
-            fprintf(f, "%s;%lu;%lu;%lu\n", dict[i]->id, capa,capa - dict[i]->v_capte,capa - dict[i]->v_traite);
+            float capa = dict[i]->capacite;
+            fprintf(f, "%s;%.3f;%.3f;%.3f\n",
+            dict[i]->id,
+            capa / 1000.0,
+            (dict[i]->v_capte) / 1000.0,
+            (dict[i]->v_traite) / 1000.0);
         }
     }
     fclose(f);

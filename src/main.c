@@ -75,7 +75,7 @@ int main(int argc, char* argv[]) {
     free(n_meilleurs);
     free(n_pire);
     libererAVL(avl);
-    printf("Mémoire libérée\n");
+    printf(ROUGE"Mémoire libérée\n"RESET);
 
     return 0;
 }

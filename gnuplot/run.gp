@@ -13,14 +13,16 @@ set xtics rotate by -45
 set key outside right top
 set rmargin 12
 set yrange [0:*]
+set xtics nomirror
+set ytics nomirror
 
 set terminal pngcairo size 1200,600 enhanced font "Verdana,10"
 
 
 # (affichage pastel empilé)
 cap_col = "#DFDFFF"
-capte_col = "#DFFFDF"
-traite_col = "#FFA0A0"
+capte_col = "#FFA0A0"
+traite_col = "#DFFFDF"
 
 #####################################################################
 # ----------------------   GRAPH MAX   ------------------------------

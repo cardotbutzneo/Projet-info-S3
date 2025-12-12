@@ -37,7 +37,6 @@ if [ "$1" = "-r" ] || [ "$1" = "--run" ]; then
         exit 1
     else
         make
-        ./main 
     fi
     exit 0
 
@@ -80,25 +79,13 @@ elif [ "$1" = "histo" ] && [ $verif_flag -eq 0 ];then #non acces aux graphiques 
     if [ "$?" -ne 0 ];then
         exit 1
     fi
-    if [ "$2" = "max" ];then
-    #fonction
-        echo "appel de la fonction pour max"
+    if [ "$2" = "max" ] || [ "$2" = "src" ] || [ "$2" = "real" ] || [ "$2" = "all" ];then
+        echo "appel de la fonction"
         trie "$1" "$2"
-        gnuplot -c gnuplot/run.gp
-        echo "Fin de programme"
+        python3 gnuplot/run.py
         exit 0
-    elif [ "$2" = "src" ];then
-        echo "appel de la fonction pour src"
-        trie "$1" "$2"
-        gnuplot -c gnuplot/run.gp
-    #fonction
-    exit 0
-    elif [ "$2" = "real" ];then
-        echo "appel de la fonction pour real"
-        trie "$1" "$2"
-        gnuplot -c gnuplot/run.gp
-        #fonction
-        exit 0
+    else
+        echo "Commande non reconnu"
     fi
 elif [ "$1" = "leaks" ];then
     if [ -z "$2" ];then

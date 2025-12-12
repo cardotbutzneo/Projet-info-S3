@@ -5,3 +5,6 @@ Critère invalide : max
 Critère invalide : max
 Critère invalide : max
 Critère invalide : max
+Critère invalide : max
+Critère invalide : src
+./bash/fonction.sh: line 162: ./main: cannot execute binary file: Exec format error
