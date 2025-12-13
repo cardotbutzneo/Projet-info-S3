@@ -6,6 +6,53 @@ Deuxième année de Pré-Ingénieur CY Tech, Semestre 3 2025-2026
 - [Néo CARDOT-BUTZ](https://github.com/cardotbutzneo)
 - [Adchayan JEYAKUMAR](https://github.com/jadchayan)
 
+![language](https://img.shields.io/badge/language-C-blue)
+![language](https://img.shields.io/badge/language-Shell-green)
 
+## Prérequis
+- gcc
+- make
+- bash
+> gnuplot ou python3
 
+## Téléchargement et compilation
+### Téléchargement
+```bash
+git clone https://github.com/cardotbutzneo/C-WildWater.git
+```
+### Compilation
+```bash
+bash launch.sh -r
+```
+Exemple de commande valide :
+```
+bash launch.sh -r
+bash launch.sh histo max
+bash launch.sh histo all
+bash launch.sh -c -a
+```
+Les commandes pour l'histogramme sont:
+> max
+> src
+> real
+> all
+
+La commande pour les fuites est:
+> bash launch.sh leaks "id_usine"
+ 
+Exemple de commande valide :
+```bash
+bash launch.sh leaks "Facility complex #WI400023I"
+````
+## Sortie du programme
+### Performance
+Temps d'éxécution du programme :
+- < 5s sur linux natif
+- < 30s sur linux wsl
+**attention : la performance du programme dépend essentiellement du temps des appels fonctions de votre OS**
+Le temps d'éxécution du programme peut varier d'un pc à l'autre.
+
+### Sortie attendu
+A la fin de l'éxécution, le programme sort une paire de graphique, contenant les 10 usines les plus productives et les 50 les moins productives, dans le dossier gnuplot/graphique au format .png.
+Les sorties (stdin ou stderr) sont redirigées vers le nom associée dans le dossier output/
 
