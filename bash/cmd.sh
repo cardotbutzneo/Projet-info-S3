@@ -38,7 +38,7 @@ aide(){ # arg1 : nom de la commande
         echo
         exit 0
     fi
-    echo "aucune documentation trouvé pour <"$1">, utilisez -a/--all pour tout afficher." >&2
+    echo "aucune documentation trouvé pour <'"$1"'>, utilisez -a/--all pour tout afficher." >&2
     echo "La documentation n'est diponible que pour les raccoursis de commande de compilation."
     echo "Exemple : -r -h : disponible / --run -h : indisponible"
     exit 1
@@ -46,12 +46,13 @@ aide(){ # arg1 : nom de la commande
 
 afficherDoc(){
     echo "Affichage de toute la documentation"
-    echo ""
+    echo "------------------------------------------------"
     for file in doc/*;do
         if [ -f "$file" ]; then
                 cat "$file"
         fi
         echo ""
+        echo "------------------------------------------------"
     done
 }
 

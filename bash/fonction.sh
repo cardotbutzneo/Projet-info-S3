@@ -1,58 +1,25 @@
 #!/bin/bash
 
+# macro de couleur
+
+ROUGE="\e[31m"
+VERT="\e[32m"
+JAUNE="\033[33m"
+RESET="\e[0m"
+
 verifDependance() {
-    local args=("gnuplot")
+    local args=("gnuplot" "python3")
 
     for cmd in "${args[@]}"; do
         if ! command -v "$cmd" &> /dev/null; then
-            printf "Erreur : La dépendance <$cmd> n'est pas installée. Veuillez l'installer et réessayer." >&2
-            printf "Pour compilez sans les dépendances ajoutez '--force'."
-            printf "Exemple : ./launch.sh [arg1] [arg2] --force -> compilation sans dépendance."
-            printf "Attention ! : Certaine fonctionalité ne seront pas présentes."
+            echo -e "${ROUGE}Erreur : La dépendance <$cmd> n'est pas installée. Veuillez l'installer et réessayer. ${RESET}"
+            echo "Pour compiler sans les dépendances ajoutez '--force'."
+            echo "Exemple : ./launch.sh [arg1] [arg2] --force -> compilation sans dépendances."
+            echo -e "${ROUGE}Attention ! : Certaine fonctionalité ne seront pas présentes.${RESET}"
             return 1
         fi
     done
     return 0
-}
-
-creerFichierData() {
-    local args=("max" "src" "real")
-    local fichier
-
-    # Vérifier si un argument est fourni
-    if [ -z "$1" ]; then
-        echo "Erreur : Aucun argument fourni. Utilisation : creerFichierData [max|src|real]" >> output/stderr
-        return 1
-    fi
-    if [ ! -d "gnuplot/data" ];then
-        mkdir gnuplot/data
-    fi
-    # Vérifier si l'argument est valide
-    local arg_valide=false
-    for arg in "${args[@]}"; do
-        if [ "$1" = "$arg" ]; then
-            arg_valide=true
-            break
-        fi
-    done
-
-    if [ "$arg_valide" = false ]; then
-        echo "Erreur : Argument '$1' non valide. Utilisez max, src ou real." >> output/stderr
-        return 1
-    fi
-
-    # Créer le fichier
-    fichier="gnuplot/data/$1.csv"
-    touch "$fichier"
-
-    # Vérifier si le fichier a été créé
-    if [ ! -e "$fichier" ]; then
-        echo "Erreur : Impossible de créer le fichier $fichier" >> output/stderr
-        return 1
-    else
-        echo "Fichier $fichier créé avec succès" >> output/stdout
-        return 0
-    fi
 }
 
 
@@ -106,11 +73,9 @@ afifchageInit(){
     echo "Go outside touching grass, lol player 🐒 🐒"
 }
 
-#  OUTPUT = "output"
-# ERRF= "$OUTPUT/stderr.txt"
-#erreur(){
-#    echo "[ERREUR] : $message" >> "$ERRF"
-#}
+erreur() {
+    printf "%b\n" "${ROUGE}$1${RESET}" >> output/stderr
+}
 
 filtrage() {
     if (( $# != 1 )); then
@@ -148,7 +113,7 @@ filtrage() {
     esac
 }
 trie(){
-    if (($# != 2));then
+    if (($# != 3));then
         echo "Erreur : manque d'argument" >> output/stderr
         return 1
     fi
@@ -156,9 +121,9 @@ trie(){
         histo)
             time {
                 {
-                    grep -E "^-;[^-;]+;-;" ./c-wildwater_v3.dat
+                    grep -E "^-;[^-;]+;-;" ./"$3"
                     echo "sources"
-                    grep -E "^-;[^;]*;[^-;]*;[^-;]*;[^;]*" ./c-wildwater_v3.dat
+                    grep -E "^-;[^;]*;[^-;]*;[^-;]*;[^;]*" ./"$3"
                 } | ./main "$2" 2>> output/stderr
             }
 
@@ -175,7 +140,7 @@ trie(){
                         -e "^-;[^-;]*;[^-;]*;-;[^-;]*" \
                         -e "^[^;]*;Junction #[A-Z0-9]+;Service #[A-Z0-9]+;-;" \
                         -e "^[^;]*;Service #[A-Z0-9]+;Cust #[A-Z0-9]+;-;[^;]*" \
-                        c-wildwater_v3.dat \
+                        "$3" \
                         | ./main "$2" 2>> output/stderr
                     }
                 }

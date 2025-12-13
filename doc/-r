@@ -1,4 +1,4 @@
-Utilisation : bash launch.sh -r/--run [option]
+Usage : bash launch.sh -r/--run [option]
 
 Permet de compiler le projet selon les règles suivantes :
 []              compile le projet sans restriction si toutes les bibliothèques sont incluses

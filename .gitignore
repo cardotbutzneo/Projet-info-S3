@@ -2,4 +2,5 @@ main
 gnuplot/data/
 obj/
 gnuplot/graphique/
+output/
 c-wildwater_v3.dat
