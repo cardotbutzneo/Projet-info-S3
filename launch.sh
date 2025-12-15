@@ -36,7 +36,7 @@ if [ "$1" != "-c" ] && [ "$1" != "--clean" ]; then
 fi
 
 if [ "$1" = "-r" ] || [ "$1" = "--run" ]; then
-    if [ "$2" != "--force" ];then
+    if [ -n "$2" ] && [ "$2" != "--force" ];then
         echo -e "${JAUNE}Argument invalide apres -r${RESET}"
         echo "-r/--run ne prend pas d'autre argument que [--force]"
         exit 1
@@ -52,7 +52,10 @@ if [ "$1" = "-r" ] || [ "$1" = "--run" ]; then
     exit 0
 fi
 
+
+
 if [ "$1" = "-c" ] || [ "$1" = "--clean" ]; then
+    make clean
     if [ "$2" = "-a" ] || [ "$2" = "--all" ]; then
         if [ -n "$3" ]; then
             echo "L'argument -c ne peut prendre que [-a/--all] en paramètre"
@@ -61,17 +64,12 @@ if [ "$1" = "-c" ] || [ "$1" = "--clean" ]; then
         fi
         echo -e "${ROUGE}Attention : vous supprimez les graphiques et fichiers temporaires${RESET}"
         read -p "Confirmer ce choix [y/n]: " confirm
-        make clean
         if [ "$confirm" = "y" ]; then
             rm -rf gnuplot/graphique/* gnuplot/data/*
             echo "Suppression terminée"
         else
             echo "Opération annulée"
         fi
-    else
-        echo -e "${JAUNE}Argument invalide apres -c${RESET}"
-        echo "-c/--clean ne prend pas d'autre arguments autres que -a/--all"
-        exit 1
     fi
     exit 0
 fi
