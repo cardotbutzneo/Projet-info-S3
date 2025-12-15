@@ -191,9 +191,24 @@ double calcul_fuites (Troncon* parent, double Volume){
             while (e != NULL){
             total_fuite +=calcul_fuites(e->noeud, separation);
             e = e->suivant;
-        }
+            }
         }
         return volume_restant;
     }
+}
+
+void libererReseau(Troncon* troncon){
+    if (troncon == NULL){
+        return;
+    }
+    Enfant* e = troncon->enfants;
+    while (e != NULL){
+        Enfant* temp = e;
+        libererReseau(e->noeud);
+        e = e->suivant;
+        free(temp);
+    }
+    free(troncon->id);
+    free(troncon);
 }
 
