@@ -76,6 +76,7 @@ afifchageInit(){
 erreur() {
     printf "%b\n" "${ROUGE}$1${RESET}" >> output/stderr
 }
+
 fuites_tri() { #vu qu'ici on a besoin de tous les tronçons liés à l'usine  on ne peut pas utiliser un filtrage classique
     if (( $# != 1)); then
     echo "Pb argument"
@@ -85,48 +86,15 @@ fuites_tri() { #vu qu'ici on a besoin de tous les tronçons liés à l'usine  on
     fi
     type=$(echo "$1" | awk '{print $1}') #awk sert à séparer des chaînes de caractères avec leurs espaces afin de pouvoir créer des id 
     id=$(echo "$1" | awk '{print $2}')
-     if ! grep -qw "$id" ./c-wildwater_v3.dat; then #grep q renvoie 0 en cas de réussite ou 1 si le mot n'est pas dans la liste
+    if ! grep -qwF "$id" ./c-wildwater_v3.dat; then #grep q renvoie 0 en cas de réussite ou 1 si le mot n'est pas dans la liste
         echo "Usine non existante"
         return 1
     fi
-      grep -w "$id" ./c-wildwater_v3.dat #grep w renvoie exactement les lignes contenant cette chaîne de caractère (AKA l'ID)
+    grep -wF "$id" ./c-wildwater_v3.dat | ./main "leaks" "$2" 2>> output/stderr  #grep w renvoie exactement les lignes contenant cette chaîne de caractère (AKA l'ID)
+    return 0
 
 }
-filtrage() {
-    if (( $# != 1 )); then
-        echo "Erreur : manque d'argument" 
-        echo "Exemple d'utilisation : "
-        echo "Usage: filtrage <type>"
-        echo "Types : usine jonction stockage raccordement source"
-        return 1
-    fi
-    case "$1" in
-        usine)
-            grep -E "^-;[^-;]+;-;" ./c-wildwater_v3.dat > gnuplot/data/usine.dat
-            #./main usine
-            ;;
-        jonction)
-            grep -E "^[^;]*;Junction #[A-Z0-9]+;Service #[A-Z0-9]+;-;" ./c-wildwater_v0.dat > gnuplot/data/jonction.dat
-            #./main jonction
-            ;;
-        stockage)
-            grep -E "^-;[^-;]*;[^-;]*;-;[^-;]*" ./c-wildwater_v0.dat > gnuplot/data/stockage.dat
-            #./main stockage
-            ;;
-        raccordement)
-            grep -E "^[^;]*;Service #[A-Z0-9]+;Cust #[A-Z0-9]+;-;[^;]*" ./c-wildwater_v0.dat > gnuplot/data/raccordement.dat
-            #./main raccordement
-            ;;
-        source)
-            grep -E "^-;[^;]*;[^-;]*;[^-;]*;[^;]*" ./c-wildwater_v3.dat > gnuplot/data/source.dat
-            #./main source
-            ;;
-        *)
-            echo "Erreur : type inconnu « $1 »"
-            return 1
-            ;;
-    esac
-}
+
 trie(){
     if (($# != 3));then
         echo "Erreur : manque d'argument" >> output/stderr
@@ -134,13 +102,11 @@ trie(){
     fi
     case "$1" in
         histo)
-            time {
-                {
-                    grep -E "^-;[^-;]+;-;" ./"$3"
-                    echo "sources"
-                    grep -E "^-;[^;]*;[^-;]*;[^-;]*;[^;]*" ./"$3"
-                } | ./main "$2" 2>> output/stderr
-            }
+            {
+                grep -E "^-;[^-;]+;-;" ./"$3"
+                echo "sources"
+                grep -E "^-;[^;]*;[^-;]*;[^-;]*;[^;]*" ./"$3"
+            } | ./main "histo" "$2" 2>> output/stderr
 
             return 0
             ;;
@@ -156,7 +122,7 @@ trie(){
                         -e "^[^;]*;Junction #[A-Z0-9]+;Service #[A-Z0-9]+;-;" \
                         -e "^[^;]*;Service #[A-Z0-9]+;Cust #[A-Z0-9]+;-;[^;]*" \
                         "$3" \
-                        | ./main "$2" 2>> output/stderr
+                        
                     }
                 }
             done

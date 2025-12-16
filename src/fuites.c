@@ -199,7 +199,7 @@ double propagation (Troncon* parent, double Volume){
 
 double calcul_fuites(pGlossaire a, const char* id){
     if(a == NULL || id == NULL){
-        return -1.0;
+        return -2.0;
     }
     Troncon* troncon = rechercheGlossaire(a, id);
     if (troncon == NULL){

@@ -100,7 +100,7 @@ if [ "$2" = "histo" ]; then
         aide "histo"
         exit 1
     fi
-    trie "$2" "$arg" "$1"
+    time trie "$2" "$arg" "$1"
     if [ "$4" = ".p" ]; then
         python3 gnuplot/run.py "$arg"
     elif [ "$4" = ".g" ]; then
@@ -122,7 +122,7 @@ if [ "$2" = "leaks" ]; then
         echo "Erreur : Identifiant de l'usine attendu pour les leaks"
         exit 1
     fi
-    trie "$1" "$2"
+    fuites_tri "$3"
     exit 0
 fi
 
