@@ -181,7 +181,7 @@ double propagation (Troncon* parent, double Volume){
         exit(1);
     }
     else{
-        double perte_locale = Volume * parent->fuite;
+        double perte_locale = Volume * (parent->fuite/100.0);
         double total_fuite = perte_locale;
         double volume_restant = Volume - perte_locale;
         if (parent->nb_enfants >0){
