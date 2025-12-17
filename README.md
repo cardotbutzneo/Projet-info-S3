@@ -7,7 +7,7 @@ Deuxième année de Pré-Ingénieur CY Tech, Semestre 3 2025-2026
 - [Adchayan JEYAKUMAR](https://github.com/jadchayan)
 
 ## 📄 Documentation
-- :scroll: [Cahier des charges](./Projet_C-WildWater_preIng2_2025_2026_v1.0.pdf)
+- :scroll: [Cahier des charges](./Projet_C-WildWater_preIng2_2025_2026_v1.1.pdf)
 - :ledger: [Rapport de projet]
 
 ## :gear: Description
@@ -60,6 +60,7 @@ Le temps d'éxécution du programme peut varier d'un pc à l'autre.
 ### Sortie attendu
 A la fin de l'éxécution, le programme sort une paire de graphique, contenant les 10 usines les plus productives et les 50 les moins productives, dans le dossier gnuplot/graphique au format .png.
 Les sorties (stdin ou stderr) sont redirigées vers le nom associée dans le dossier output/
+
 
 
 
