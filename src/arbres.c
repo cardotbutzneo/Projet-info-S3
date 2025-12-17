@@ -2,29 +2,29 @@
 #include "arbres.h"
 #include "couleurs.h"
 #include <string.h>
-pAVL creerAVL(pUsine usine) {
+pAVL creerAVL(pUsine usine) { // Création d'un noeud d'AVL en prenant une usune en paramètre
   if (usine == NULL){
-      return NULL;
+      return NULL; // Si l'usine est égale à NULL, il n'y a aucune raison de créer l'AVL
   }
   pAVL nouveau = NULL; 
   nouveau = malloc(sizeof(Usine));
   if (nouveau == NULL){
       printf("Erreur d'allocation de mémoire");
-      exit(1);
+      exit(1); // Arrêt de la fonction en cas d'erreur d'allocation de mémoire
   }
-  nouveau->usine=usine;
+  nouveau->usine=usine; // Mis à jour des champs 
   nouveau->fg=NULL;
   nouveau->fd=NULL;
-  nouveau->eq=0;
+  nouveau->eq=0; // Facteur d'équilibre initialisé à 0
  return nouveau;
 }
 
 pAVL rotationGauche(pAVL a){
- pAVL pivot = a->fd;
+ pAVL pivot = a->fd; // Le fils droit devient le pivot 
  int eq_a = a->eq, eq_p = pivot->eq;
- a->fd = pivot->fg;
- pivot->fg = a;
- if (eq_p>0) {
+ a->fd = pivot->fg; // Le sous-arbre gauche du pivot devient le fils droit de 'a'
+ pivot->fg = a; // 'a' devient le fils gauche du pivot
+ if (eq_p>0) { // Mise à jour des facteurs d'équilibre
     a->eq = eq_a-eq_p-1;
  } else {
     a->eq = eq_a-0-1; 
@@ -39,15 +39,15 @@ pAVL rotationGauche(pAVL a){
  } else if (z <= x && z <= y) {
     eq_p = z;
  }
- return pivot;
+ return pivot; // Le pivot devient la nouvelle racine
 }
 
 pAVL rotationDroite(pAVL a){
- pAVL pivot = a->fg;
+ pAVL pivot = a->fg; // Le fils gauche devient le pivot
  int eq_a = a->eq, eq_p = pivot->eq;
- a->fg = pivot->fd;
- pivot->fd = a;
- if (eq_p<0) {
+ a->fg = pivot->fd; // Le sous-arbre droit du pivot devient le fils gauche de 'a'
+ pivot->fd = a; // 'a' devient le fils droit du pivot
+ if (eq_p<0) { // Mis à jour des facteurs d'équilibre
    a->eq = eq_a-eq_p+1;
  } else {
     a->eq = eq_a-0+1; 
@@ -62,9 +62,10 @@ pAVL rotationDroite(pAVL a){
  } else if (z >= x && z >= y) {
     eq_p = z;
  }
- return pivot;
+ return pivot; // Le pivot devient la nouvelle racine
 }
- pAVL doubleRotationGauche(pAVL a){
+
+pAVL doubleRotationGauche(pAVL a){
    a->fd = rotationDroite(a->fd);
    return rotationGauche(a);
  }
@@ -75,34 +76,34 @@ pAVL doubleRotationDroite(pAVL a){
  }
 
 pAVL equilibrerAVL(pAVL a) {
-    if (a->eq >= 2) {
+    if (a->eq >= 2) { // Cas où le coté droit de l'arbre est déséquilibré
         if (a->fd->eq >= 0) {
            return rotationGauche(a); 
         } else {
             return doubleRotationGauche(a); 
         }
-    } else if (a->eq <= -2) {
+    } else if (a->eq <= -2) { // Cas où le côté gauche de l'arbre est désiquilibré
         if (a->fg->eq <= 0) {
             return rotationDroite(a); 
         } else {
             return doubleRotationDroite(a);
         }
     }
-    return a; 
+    return a; // Aucun rééquilibrage nécessaire
 }     
 
-void libererAVL(pAVL a){
+void libererAVL(pAVL a){ // Libération de l'AVL
     if(a == NULL){
        return;
     }
     if(a->fd != NULL){
-       libererAVL(a->fd);
+       libererAVL(a->fd); // Libération du sous-arbre droit
     }
     if(a->fg != NULL){
-       libererAVL(a->fg);
+       libererAVL(a->fg); // Libération du sous-arbre gauche
     }
     free(a->usine);
-    free(a); 
+    free(a); // Libération du noeud courant
 }
 /*
 void parcoursAVL(pAVL a){
@@ -116,12 +117,12 @@ void parcoursAVL(pAVL a){
 */
 
 int hauteur(pAVL a){
-   if (a == NULL){
-      return 0;
+   if (a == NULL){ // Cas où l'arbre est vide
+      return 0; // Hauteur nulle 
    }
-   int hd = hauteur(a->fd);
-   int hg = hauteur(a->fg);
-   if(hd > hg){
+   int hd = hauteur(a->fd); // Calcul récursif de la hauteur du sous-arbre droit
+   int hg = hauteur(a->fg); // Calcul récursif de la hauteur du sous-arbre gauche
+   if(hd > hg){ // La hauteur est le maximum des deux hauteurs
       return 1+hd;
    } else {
       return 1+hg;
@@ -162,24 +163,24 @@ pAVL recherche(pAVL a, const char* id) {
 
 
 pAVL insertionAVL(pAVL a, pUsine usine, int *h){
-    if (a == NULL){
-        *h=1;
+    if (a == NULL){ // Cas où l'arbre est vide
+        *h=1; // Augmentation de la hauteur suite à la création d'un nouveau noeud
         return creerAVL(usine);
     }
-    if (strcmp(usine->id, a->usine->id) < 0){
-        a->fg=insertionAVL(a->fg, usine, h);
-        *h=-*h;
+    if (strcmp(usine->id, a->usine->id) < 0){ // Cas où l'élément est plus petit
+        a->fg=insertionAVL(a->fg, usine, h); // Insertion dans le sous-arbre gauche
+        *h=-*h; // Inversion de l'impact de la hauteur
     }
-    else if (strcmp(usine->id, a->usine->id) > 0){
-        a->fd=insertionAVL(a->fd, usine, h);
-    } else {
+    else if (strcmp(usine->id, a->usine->id) > 0){ // Cas où l'élément est plus grand
+        a->fd=insertionAVL(a->fd, usine, h); // Insertion dans le sous-arbre droit
+    } else { // Elément déjà présent
         *h=0;
         return a;
     }
-    if(*h != 0){
+    if(*h != 0){ // Mis à jour du facteur d'équilibre
         a->eq += *h;
         a=equilibrerAVL(a);
-        if(a->eq == 0){
+        if(a->eq == 0){ // Mis à jour de la hauteur
             *h=0;
         } else {
             *h=1;
@@ -205,3 +206,4 @@ void afficherAVL(pAVL avl, int *cmp){
 
     afficherAVL(avl->fd, cmp);
 }
+
