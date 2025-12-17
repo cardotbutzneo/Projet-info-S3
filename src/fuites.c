@@ -151,7 +151,7 @@ Troncon* rechercheGlossaire(pGlossaire a, const char* id) {
     return NULL;
 }
 
-Troncon* creerTroncon(const char *id, double fuite){
+Troncon* creerTroncon(const char *id, double fuite, double volume){
     Troncon* nouveau = malloc(sizeof(Troncon));
     if (nouveau == NULL){
         printf("Erreur d'allocation de mémoire");
@@ -159,7 +159,7 @@ Troncon* creerTroncon(const char *id, double fuite){
     }
     nouveau->id = strdup(id);
     nouveau->fuite = fuite;
-    nouveau->volume = 0.0;
+    nouveau->volume = volume;
     nouveau->nb_enfants = 0;
     nouveau->enfants = NULL;
     return nouveau;
@@ -177,19 +177,19 @@ void ajouter_enfant(Troncon* parent, Troncon* enfant){
     parent->nb_enfants ++;
 }
 
-double propagation (Troncon* parent, double Volume){
+double propagation (Troncon* parent, double volume){
     if (parent == NULL){
         exit(1);
     }
     else{
-        double perte_locale = Volume * (parent->fuite/100.0);
+        double perte_locale = volume * (parent->fuite/100.0);
         double total_fuite = perte_locale;
-        double volume_restant = Volume - perte_locale;
+        double volume_restant = volume - perte_locale;
         if (parent->nb_enfants >0){
            double separation = volume_restant / parent->nb_enfants; 
             Enfant* e= parent->enfants;
             while (e != NULL){
-            total_fuite +=propagation(e->noeud, separation);
+                total_fuite += propagation(e->noeud, separation);
             e = e->suivant;
             }
         }
@@ -229,7 +229,7 @@ int traitement_ligne_fuite(
     char* parent,
     char* enfant,
     char* service,
-    unsigned long* valeur,
+    double* valeur,
     double* fuite
 ) {
     char valeur_str[64];
@@ -259,5 +259,4 @@ int traitement_ligne_fuite(
     }
 
     return 1;
-}
 }

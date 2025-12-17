@@ -86,12 +86,12 @@ fuites_tri() { #vu qu'ici on a besoin de tous les tronçons liés à l'usine  on
     fi
     type=$(echo "$1" | awk '{print $1}') #awk sert à séparer des chaînes de caractères avec leurs espaces afin de pouvoir créer des id 
     id=$(echo "$1" | awk '{print $2}')
-    if ! grep -qwF "$id" ./c-wildwater_v0.dat; then #grep q renvoie 0 en cas de réussite ou 1 si le mot n'est pas dans la liste
+    if ! grep -qwF "$id" ./c-wildwater_v3.dat; then #grep q renvoie 0 en cas de réussite ou 1 si le mot n'est pas dans la liste
         echo "Usine non existante"
         return 1
     fi
     echo "$1"
-    grep -wF "$id" ./c-wildwater_v0.dat | ./main "leaks" "$1" 2>> output/stderr  #grep w renvoie exactement les lignes contenant cette chaîne de caractère (AKA l'ID)
+    grep -wF "$id" ./c-wildwater_v3.dat | ./main "leaks" "$1" 2>> output/stderr  #grep w renvoie exactement les lignes contenant cette chaîne de caractère (AKA l'ID)
     return 0
 
 }

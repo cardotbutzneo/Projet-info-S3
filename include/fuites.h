@@ -33,11 +33,11 @@ pGlossaire equilibrerGlossaire(pGlossaire a);
 pGlossaire insertionGlossaire(pGlossaire a, Troncon* adresse, const char* id, int *h);
 void libererGlossaire(pGlossaire a);
 Troncon* rechercheGlossaire(pGlossaire a, const char* id);
-Troncon* creerTroncon(const char *id, double fuite);
+Troncon* creerTroncon(const char *id, double fuite, double volume);
 void ajouter_enfant(Troncon* parent, Troncon* enfant);
 double propagation (Troncon* parent, double Volume);
 double calcul_fuites(pGlossaire a, const char* id);
 void libererReseau(Troncon* troncon);
-int traitement_ligne_fuite(const char* buffer,char* parent, char* enfant, char* dash, unsigned long* valeur, double* fuite);
+int traitement_ligne_fuite(const char* buffer,char* parent, char* enfant, char* dash, double* valeur, double* fuite);
 
 #endif

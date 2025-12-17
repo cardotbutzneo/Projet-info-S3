@@ -84,16 +84,16 @@ int main(int argc, char* argv[]) {
     // Gestion des fuites
 
     else if (strcmp(type_traitement, "leaks") == 0) {  //regarde si l'utilisateur a entré leaks en argument
-        printf("Traitement des leaks %s...\n", argv[2]);
+        printf("Traitement des leaks '%s'...\n", argv[2]);
         char* id_usine = argv[2];
-            pGlossaire glossaire = NULL;
+        pGlossaire glossaire = NULL;
         int h = 0;
         char buffer[1024];
         char dash[8];
         char parent_name[64];
         char enfant_name[64];
 
-        unsigned long valeur;
+        double valeur;
         double fuite = 0.0;
 
         while (fgets(buffer, sizeof(buffer), stdin)) {
@@ -108,7 +108,7 @@ int main(int argc, char* argv[]) {
                     parent_tr = rechercheGlossaire(glossaire, parent_name);
 
                     if (!parent_tr) {
-                        parent_tr = creerTroncon(parent_name, 0.0);
+                        parent_tr = creerTroncon(parent_name, 0.0, valeur);
                     }
 
                     glossaire = insertionGlossaire(glossaire, parent_tr, parent_name, &h);
@@ -119,7 +119,7 @@ int main(int argc, char* argv[]) {
                     enfant_tr = rechercheGlossaire(glossaire, enfant_name);
 
                     if (!enfant_tr) {
-                        enfant_tr = creerTroncon(enfant_name, fuite);
+                        enfant_tr = creerTroncon(enfant_name, fuite, valeur);
                     }
 
                     glossaire = insertionGlossaire(glossaire, enfant_tr, enfant_name, &h);
@@ -134,13 +134,13 @@ int main(int argc, char* argv[]) {
             }
         }
 
-
         Troncon* usine = rechercheGlossaire(glossaire, id_usine);
+        printf("%f\n",glossaire->adresse->volume);
         if (!usine) {
             fprintf(stderr, "Usine non trouvée : %s\n", id_usine);
         } else {
-            double total_fuites = propagation(usine, usine->volume);
-            printf("Fuites totales pour %s : %f\n", id_usine, total_fuites);
+            double total_fuites = calcul_fuites(glossaire, id_usine);
+            printf("Fuites totales pour '%s' : %f\n", id_usine, total_fuites);
         }
         libererGlossaire(glossaire);
     }
