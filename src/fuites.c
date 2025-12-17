@@ -2,26 +2,26 @@
 #include "../include/fuites.h"
 #include <string.h>
 
-// Création d'un noeud d'AVL en prenant un identifiant et une adresse pour créer le glossaire.
+// Création d'un noeud d'AVL en prenant un identifiant et une adresse pour créer le glossaire
 pGlossaire creerGlossaire(const char* id, Troncon* adresse){ 
     if (adresse == NULL || id == NULL){ 
-        return NULL; // Si l'adresse ou l'identifiant est nul, il n'y a aucune raison de créer l'AVL.
+        return NULL; // Si l'adresse ou l'identifiant est nul, il n'y a aucune raison de créer l'AVL
     }
     pGlossaire nouveau = malloc(sizeof(Glossaire)); 
     if (nouveau == NULL){
         printf("Erreur d'allocation de mémoire");
-        exit(1); // Arrêt de la fonction en cas d'erreur d'allocation de mémoire.
+        exit(1); // Arrêt de la fonction en cas d'erreur d'allocation de mémoire
     }
-    nouveau->id=strdup(id); // Copie de l'identifiant pris en paramètre dans la variable du nouveau noeud.
+    nouveau->id=strdup(id); // Copie de l'identifiant pris en paramètre dans la variable du nouveau noeud
     nouveau->adresse=adresse; 
     nouveau->fg=NULL; 
     nouveau->fd=NULL; 
-    nouveau->eq=0; // Facteur d'équilibre initialisé à 0.
+    nouveau->eq=0; // Facteur d'équilibre initialisé à 0
     return nouveau;
 }
 
 pGlossaire Glossaire_rotationGauche(pGlossaire a){
-    pGlossaire pivot = a->fd; // Le fils droit devient le pivot.
+    pGlossaire pivot = a->fd; // Le fils droit devient le pivot
     int eq_a = a->eq, eq_p = pivot->eq;
     a->fd = pivot->fg; // Le sous-arbre gauche du pivot devient le fils droit de 'a'
     pivot->fg = a; // 'a' devient le fils gauche du pivot
@@ -40,7 +40,7 @@ pGlossaire Glossaire_rotationGauche(pGlossaire a){
     } else if (z <= x && z <= y) {
         eq_p = z;
     }
-    return pivot; // Le pivot devient la nouvelle racine.
+    return pivot; // Le pivot devient la nouvelle racine
 }
 
 pGlossaire Glossaire_rotationDroite(pGlossaire a){
@@ -48,7 +48,7 @@ pGlossaire Glossaire_rotationDroite(pGlossaire a){
  int eq_a = a->eq, eq_p = pivot->eq;
  a->fg = pivot->fd; // Le sous-arbre droit du pivot devient le fils gauche de 'a'
  pivot->fd = a; // 'a' devient le fils droit du pivot
- if (eq_p<0) {
+ if (eq_p<0) { // Mis à jour des facteurs d'équilibre
    a->eq = eq_a-eq_p+1;
  } else {
     a->eq = eq_a-0+1; 
@@ -63,7 +63,7 @@ pGlossaire Glossaire_rotationDroite(pGlossaire a){
  } else if (z >= x && z >= y) {
     eq_p = z;
  }
- return pivot;
+ return pivot; // Le pivot devient la nouvelle racine
 }
 
  pGlossaire Glossaire_doubleRotationGauche(pGlossaire a){
@@ -98,20 +98,20 @@ pGlossaire insertionGlossaire(pGlossaire a, Troncon* adresse, const char* id, in
         *h=1; // Augmentation de la hauteur suite à la création d'un nouveau noeud
         return creerGlossaire(id, adresse); 
     }
-    if (strcmp(id, a->id) < 0){
-        a->fg=insertionGlossaire(a->fg, adresse, id, h);
-        *h=-*h;
+    if (strcmp(id, a->id) < 0){ // Cas où l'élément est plus petit
+        a->fg=insertionGlossaire(a->fg, adresse, id, h); // Insertion dans le sous-arbre gauche 
+        *h=-*h; // Inversion de l'impact de la hauteur
     }
-    else if (strcmp(id, a->id) > 0){
-        a->fd=insertionGlossaire(a->fd, adresse, id, h);
-    } else {
+    else if (strcmp(id, a->id) > 0){ // Cas où l'élément est plus grand
+        a->fd=insertionGlossaire(a->fd, adresse, id, h); // Insertion dans le sous-arbre droit
+    } else { // Elément déjà présent
         *h=0;
         return a;
     }
-    if(*h != 0){
+    if(*h != 0){ // Mis à jour du facteur d'équilibre
         a->eq += *h;
-        a=equilibrerGlossaire(a);
-        if(a->eq == 0){
+        a=equilibrerGlossaire(a); 
+        if(a->eq == 0){ // Mis à jour de la hauteur
             *h=0;
         } else {
             *h=1;
@@ -120,38 +120,38 @@ pGlossaire insertionGlossaire(pGlossaire a, Troncon* adresse, const char* id, in
     return a;
 }
 
-void libererGlossaire(pGlossaire a){
+void libererGlossaire(pGlossaire a){ // Libération de l'avl glossaire
     if(a == NULL){
        return;
     }
     if(a->fd != NULL){
-       libererGlossaire(a->fd);
+       libererGlossaire(a->fd); // Libération du sous-arbre droit
     }
     if(a->fg != NULL){
-       libererGlossaire(a->fg);
+       libererGlossaire(a->fg); // Libération du sous-arbre gauche
     }
     free(a->id);
-    free(a); 
+    free(a); // Libération du noeud courant
 }
 
-Troncon* rechercheGlossaire(pGlossaire a, const char* id) {
-    if (!a || !id){
+Troncon* rechercheGlossaire(pGlossaire a, const char* id) { // Recherche d'un identifiant dans le glossaire
+    if (!a || !id){ // Cas où l'arbre est vide ou l'identifiant est nul
         return NULL;
     }
-    int comparateur = strcmp(id,a->id);
-    if (comparateur == 0){
+    int comparateur = strcmp(id,a->id); // Mis en place d'un comparateur lexicographique
+    if (comparateur == 0){ // Cas où l'identifiant coïncide avec l'identifiant du noeud courant
         return a->adresse;
     }
-    if (comparateur < 0){
+    if (comparateur < 0){ // Cas où l'identifiant recherché est dans le sous-arbre gauche
         return rechercheGlossaire(a->fg,id);
     }
-    else {
+    else { // Cas où l'identifiant recherché est dans le sous-arbre droit
         return rechercheGlossaire(a->fd,id);
     }
     return NULL;
 }
 
-Troncon* creerTroncon(const char *id, double fuite, double volume){
+Troncon* creerTroncon(const char *id, double fuite, double volume){ // Créastion d'un tronçon dans le cas de l'arbre k-aire
     Troncon* nouveau = malloc(sizeof(Troncon));
     if (nouveau == NULL){
         printf("Erreur d'allocation de mémoire");
@@ -165,32 +165,32 @@ Troncon* creerTroncon(const char *id, double fuite, double volume){
     return nouveau;
 }
 
-void ajouter_enfant(Troncon* parent, Troncon* enfant){
+void ajouter_enfant(Troncon* parent, Troncon* enfant){ // Ajout d'une infrastructure dans l'arbre k-aire
     Enfant* nv = malloc(sizeof(Enfant));
     if (nv == NULL){
         printf("Erreur d'allocation de mémoire");
         exit(1);
     }
-    nv->noeud = enfant;
-    nv->suivant = parent->enfants;
+    nv->noeud = enfant; // Association du tronçon enfant au noeud 
+    nv->suivant = parent->enfants; // Insertion du noeud en tête de la liste chainée des enfants
     parent->enfants = nv;
-    parent->nb_enfants ++;
+    parent->nb_enfants ++; // Augmentation du nombre d'enfants suite à l'ajout
 }
 
-double propagation (Troncon* parent, double volume){
+double propagation (Troncon* parent, double volume){ // Ouverture des vannes
     if (parent == NULL){
         exit(1);
     }
     else{
-        double perte_locale = volume * (parent->fuite/100.0);
+        double perte_locale = volume * (parent->fuite/100.0); // Calcul de la fuite au niveau du tronçon
         double total_fuite = perte_locale;
-        double volume_restant = volume - perte_locale;
-        if (parent->nb_enfants >0){
-           double separation = volume_restant / parent->nb_enfants; 
+        double volume_restant = volume - perte_locale; // Volume restant apès la fuite
+        if (parent->nb_enfants >0){ // Cas où le tronçon a des enfants
+           double separation = volume_restant / parent->nb_enfants;  // Volume réparti équitablement entre les enfants
             Enfant* e= parent->enfants;
             while (e != NULL){
-                total_fuite += propagation(e->noeud, separation);
-            e = e->suivant;
+                total_fuite += propagation(e->noeud, separation); // Propogation récursive
+                e = e->suivant;
             }
         }
         return total_fuite;
@@ -198,29 +198,29 @@ double propagation (Troncon* parent, double volume){
 }
 
 double calcul_fuites(pGlossaire a, const char* id){
-    if(a == NULL || id == NULL){
+    if(a == NULL || id == NULL){ // Vérification des paramètres
         return -2.0;
     }
-    Troncon* troncon = rechercheGlossaire(a, id);
-    if (troncon == NULL){
-        return -1.0;
+    Troncon* troncon = rechercheGlossaire(a, id); // Recherche de l'identifiant du tronçon dans le glossaire
+    if (troncon == NULL){  
+        return -1.0; // Renvoie -1 si le tronçon est nul
     } else {
-        return propagation(troncon, troncon->volume);
+        return propagation(troncon, troncon->volume); // Appel vers la fonction propagation en cas d'existence du tronçon
     }
 }
 
-void libererReseau(Troncon* troncon){
-    if (troncon == NULL){
+void libererReseau(Troncon* troncon){ 
+    if (troncon == NULL){ // Vérification du paramètre
         return;
     }
-    Enfant* e = troncon->enfants;
+    Enfant* e = troncon->enfants; // Parcours et libération des enfants 
     while (e != NULL){
         Enfant* temp = e;
-        libererReseau(e->noeud);
-        e = e->suivant;
-        free(temp);
+        libererReseau(e->noeud); // Libération récursive du sous-arbre
+        e = e->suivant; // Passage à l'enfant suivant
+        free(temp); // Libération de l'enfant
     }
-    free(troncon->id);
+    free(troncon->id); // Libération des champs
     free(troncon);
 }
 
