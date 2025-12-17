@@ -224,17 +224,40 @@ void libererReseau(Troncon* troncon){
     free(troncon);
 }
 
-int traitement_ligne_fuite(const char* buffer,char* parent_type, char* parent_id,char* enfant_type, char* enfant_id,char* service_type, char* service_id,char* dash, double* fuite) {
+int traitement_ligne_fuite(
+    const char* buffer,
+    char* parent,
+    char* enfant,
+    char* service,
+    unsigned long* valeur,
+    double* fuite
+) {
+    char valeur_str[64];
+    char fuite_str[64];
 
-    if (!buffer || !parent_type || !parent_id || !enfant_type || !enfant_id || !service_type || !service_id || !dash || !fuite) {
-    return 0; // erreur
+    int nb = sscanf(buffer,
+        "%63[^;];%63[^;];%63[^;];%63[^;];%63[^;\n]",
+        parent, enfant, service, valeur_str, fuite_str
+    );
+
+    if (nb != 5) {
+        return 0;
     }
-int nb = sscanf(buffer,"%31[^#]#%63[^;];%31[^#]#%63[^;];%31[^#]#%63[^;];%7[^;];%lf",parent_type, parent_id,enfant_type, enfant_id,service_type, service_id,dash, fuite);
-if (nb < 7){
-    printf("Ligne mal écrite \n");
-    return(0);
-}
-else{
-    return (1);
+
+    // Traitement du champ valeur
+    if (strcmp(valeur_str, "-") == 0) {
+        *valeur = 0;
+    } else {
+        *valeur = strtoul(valeur_str, NULL, 10);
+    }
+
+    // Traitement du champ fuite
+    if (strcmp(fuite_str, "-") == 0) {
+        *fuite = 0.0;
+    } else {
+        *fuite = atof(fuite_str);
+    }
+
+    return 1;
 }
 }

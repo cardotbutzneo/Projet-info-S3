@@ -84,48 +84,65 @@ int main(int argc, char* argv[]) {
     // Gestion des fuites
 
     else if (strcmp(type_traitement, "leaks") == 0) {  //regarde si l'utilisateur a entré leaks en argument
-    printf("Traitement des leaks %s...\n", argv[2]);
-    char* id_usine = argv[2];
-        pGlossaire glossaire = NULL;
-    int h = 0;
-    char buffer[1024];
-    while (fgets(buffer, sizeof(buffer), stdin)) {
-        char parent_type[32], parent_id[64],enfant_type[32], enfant_id[64],service_type[32], service_id[64],dash[8];
+        printf("Traitement des leaks %s...\n", argv[2]);
+        char* id_usine = argv[2];
+            pGlossaire glossaire = NULL;
+        int h = 0;
+        char buffer[1024];
+        char dash[8];
+        char parent_name[64];
+        char enfant_name[64];
+
+        unsigned long valeur;
         double fuite = 0.0;
 
-        if (traitement_ligne_fuite(buffer, parent_type, parent_id,enfant_type, enfant_id,service_type, service_id, dash, &fuite)) {
-            Troncon* parent = NULL;
-            if (strcmp(parent_id, "-") != 0) {
-                parent = rechercheGlossaire(glossaire, parent_id);
-                if (!parent) {
-                    parent = creerTroncon(parent_id, 0.0); //Nécessaire sinon il se peut qu'on insère qqch de null dns l'AVL et bonjour la misère
-                }
-                glossaire = insertionGlossaire(glossaire, parent, parent_id, &h);
-            }
-            Troncon* enfant = NULL;
-            if (strcmp(enfant_id, "-") != 0) {
-                enfant = rechercheGlossaire(glossaire, enfant_id);
-                if (!enfant) {
-                    enfant = creerTroncon(enfant_id, fuite); //Pareil ici
-                }
-                glossaire = insertionGlossaire(glossaire, enfant, enfant_id, &h);
-            }
-            if (parent && enfant) { //(si les deux ne sont pas null)
-                ajouter_enfant(parent, enfant);
-            }
-        } else {
-            fprintf(stderr, "Ligne mal formée : %s", buffer);
-        }
-    }
+        while (fgets(buffer, sizeof(buffer), stdin)) {
 
-    Troncon* usine = rechercheGlossaire(glossaire, id_usine);
-    if (!usine) {
-        fprintf(stderr, "Usine non trouvée : %s\n", id_usine);
-    } else {
-        double total_fuites = propagation(usine, usine->volume);
-        printf("Fuites totales pour %s : %f\n", id_usine, total_fuites);
+            if (traitement_ligne_fuite(buffer, dash, parent_name, enfant_name, &valeur, &fuite)) {
+
+                Troncon* parent_tr = NULL;
+                Troncon* enfant_tr = NULL;
+
+                if (strcmp(parent_name, "-") != 0) {
+
+                    parent_tr = rechercheGlossaire(glossaire, parent_name);
+
+                    if (!parent_tr) {
+                        parent_tr = creerTroncon(parent_name, 0.0);
+                    }
+
+                    glossaire = insertionGlossaire(glossaire, parent_tr, parent_name, &h);
+                }
+
+                if (strcmp(enfant_name, "-") != 0) {
+
+                    enfant_tr = rechercheGlossaire(glossaire, enfant_name);
+
+                    if (!enfant_tr) {
+                        enfant_tr = creerTroncon(enfant_name, fuite);
+                    }
+
+                    glossaire = insertionGlossaire(glossaire, enfant_tr, enfant_name, &h);
+                }
+
+                if (parent_tr && enfant_tr) {
+                    ajouter_enfant(parent_tr, enfant_tr);
+                }
+
+            } else {
+                fprintf(stderr, "Ligne mal formée : %s", buffer);
+            }
+        }
+
+
+        Troncon* usine = rechercheGlossaire(glossaire, id_usine);
+        if (!usine) {
+            fprintf(stderr, "Usine non trouvée : %s\n", id_usine);
+        } else {
+            double total_fuites = propagation(usine, usine->volume);
+            printf("Fuites totales pour %s : %f\n", id_usine, total_fuites);
+        }
+        libererGlossaire(glossaire);
     }
-    libererGlossaire(glossaire);
-}
     return 0;
 }

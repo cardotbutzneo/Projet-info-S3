@@ -38,6 +38,6 @@ void ajouter_enfant(Troncon* parent, Troncon* enfant);
 double propagation (Troncon* parent, double Volume);
 double calcul_fuites(pGlossaire a, const char* id);
 void libererReseau(Troncon* troncon);
-int traitement_ligne_fuite(const char* buffer,char* parent_type, char* parent_id,char* enfant_type, char* enfant_id,char* service_type, char* service_id,char* dash, double* fuite);
+int traitement_ligne_fuite(const char* buffer,char* parent, char* enfant, char* dash, unsigned long* valeur, double* fuite);
 
 #endif
