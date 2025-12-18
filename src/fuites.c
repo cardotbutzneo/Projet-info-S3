@@ -177,24 +177,27 @@ void ajouter_enfant(Troncon* parent, Troncon* enfant){ // Ajout d'une infrastruc
     parent->nb_enfants ++; // Augmentation du nombre d'enfants suite à l'ajout
 }
 
-double propagation (Troncon* parent, double volume){ // Ouverture des vannes
-    if (parent == NULL){
-        exit(1);
-    }
-    else{
-        double perte_locale = volume * (parent->fuite/100.0); // Calcul de la fuite au niveau du tronçon
-        double total_fuite = perte_locale;
-        double volume_restant = volume - perte_locale; // Volume restant apès la fuite
-        if (parent->nb_enfants >0){ // Cas où le tronçon a des enfants
-           double separation = volume_restant / parent->nb_enfants;  // Volume réparti équitablement entre les enfants
-            Enfant* e= parent->enfants;
-            while (e != NULL){
-                total_fuite += propagation(e->noeud, separation); // Propogation récursive
-                e = e->suivant;
-            }
+double propagation(Troncon* parent, double volume) {
+    if (!parent || volume <= 0.0) return 0.0;
+
+    // Perte locale
+    double perte_locale = volume * (parent->fuite / 100.0);
+
+    // Volume restant à distribuer aux enfants
+    double volume_restant = volume - perte_locale;
+    double total_fuite = perte_locale;
+
+    // Si le tronçon a des enfants, distribuer le volume restant
+    if (parent->nb_enfants > 0) {
+        double part = volume_restant / parent->nb_enfants;
+        Enfant* e = parent->enfants;
+        while (e != NULL) {
+            total_fuite += propagation(e->noeud, part);
+            e = e->suivant;
         }
-        return total_fuite;
     }
+
+    return total_fuite;
 }
 
 double calcul_fuites(pGlossaire a, const char* id){
@@ -205,6 +208,7 @@ double calcul_fuites(pGlossaire a, const char* id){
     if (troncon == NULL){  
         return -1.0; // Renvoie -1 si le tronçon est nul
     } else {
+        printf("ID=%s\nvol=%lf\nleaks=%lf\n", troncon->id, troncon->volume, troncon->fuite);
         return propagation(troncon, troncon->volume); // Appel vers la fonction propagation en cas d'existence du tronçon
     }
 }
@@ -230,7 +234,8 @@ int traitement_ligne_fuite(
     char* enfant,
     char* service,
     double* valeur,
-    double* fuite
+    double* fuite,
+    double* somme
 ) {
     char valeur_str[64];
     char fuite_str[64];
@@ -243,12 +248,24 @@ int traitement_ligne_fuite(
     if (nb != 5) {
         return 0;
     }
+    //Vérif si source
+    if (strcmp(parent,"-")==0 && strcmp(valeur_str, "-") !=0 && strcmp(fuite_str, "-") !=0) {
+        printf("Source détectée : valeur=%s fuite=%s\n",valeur_str, fuite_str);
+        if(somme) {
+            double volume = atof(valeur_str);
+            double fuite  = atof(fuite_str) / 100.0;
+
+            *somme += volume * (1.0 - fuite);
+
+        }
+        
+    }
 
     // Traitement du champ valeur
     if (strcmp(valeur_str, "-") == 0) {
-        *valeur = 0;
+        *valeur = 0.0;
     } else {
-        *valeur = strtoul(valeur_str, NULL, 10);
+        *valeur = atof(valeur_str);
     }
 
     // Traitement du champ fuite
