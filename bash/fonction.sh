@@ -5,6 +5,7 @@
 ROUGE="\e[31m"
 VERT="\e[32m"
 JAUNE="\033[33m"
+VIOLET="\e[35m"
 RESET="\e[0m"
 
 verifDependance() {

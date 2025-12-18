@@ -152,7 +152,7 @@ int main(int argc, char* argv[]) {
 
         else {
             usine->volume=somme;
-            printf("vol: %f\n", usine->volume);
+            //printf("vol: %f\n", usine->volume);
             double total_fuites = calcul_fuites(glossaire, id_usine);   
             printf(VERT"Fuites totales pour '%s' : %.3fk.m3\n"RESET, id_usine, total_fuites);
         }

@@ -2,6 +2,8 @@
 
 source bash/fonction.sh
 
+start=$(date +%s)
+
 echo "Compilation"
 bash launch.sh -r
 
@@ -9,6 +11,8 @@ if [ ! -f "main" ];then
     echo "Erreur : executable introuvable"
     exit 1
 fi
+
+clear
 
 # test des histogramme
 echo "----------------------"
@@ -36,5 +40,11 @@ echo "Fin des tests"
 echo "----------------------"
 
 bash launch.sh -c -a
+
+end=$(date +%s)
+
+temp=$((temp + end - start))
+
+echo -e "${VIOLET}Temps de fonctionnement (graphique + fuite) : ${temp} s${RESET}"
 
 exit 0
