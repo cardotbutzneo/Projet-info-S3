@@ -208,7 +208,7 @@ double calcul_fuites(pGlossaire a, const char* id){
     if (troncon == NULL){  
         return -1.0; // Renvoie -1 si le tronçon est nul
     } else {
-        printf("ID=%s\nvol=%lf\nleaks=%lf\n", troncon->id, troncon->volume, troncon->fuite);
+        //printf("ID=%s\nvol=%lf\nleaks=%lf\n", troncon->id, troncon->volume, troncon->fuite);
         return propagation(troncon, troncon->volume); // Appel vers la fonction propagation en cas d'existence du tronçon
     }
 }
@@ -250,7 +250,6 @@ int traitement_ligne_fuite(
     }
     //Vérif si source
     if (strcmp(parent,"-")==0 && strcmp(valeur_str, "-") !=0 && strcmp(fuite_str, "-") !=0) {
-        printf("Source détectée : valeur=%s fuite=%s\n",valeur_str, fuite_str);
         if(somme) {
             double volume = atof(valeur_str);
             double fuite  = atof(fuite_str) / 100.0;

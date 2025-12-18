@@ -78,55 +78,32 @@ erreur() {
 }
 
 fuites_tri() { #vu qu'ici on a besoin de tous les tronçons liés à l'usine  on ne peut pas utiliser un filtrage classique
-    if (( $# != 1)); then
+    if (( $# != 2)); then
     echo "Pb argument"
     echo "Exemple d'utilisation : Facility complex #RH400057F"
     echo "Usage: fuites_tri <Type ID_Usine>"
     return 1
     fi
-    type=$(echo "$1" | awk '{print $1}') #awk sert à séparer des chaînes de caractères avec leurs espaces afin de pouvoir créer des id 
-    id=$(echo "$1" | awk '{print $2}')
-    if ! grep -qwF "$id" ./c-wildwater_v3.dat; then #grep q renvoie 0 en cas de réussite ou 1 si le mot n'est pas dans la liste
+    if ! grep -qwF "$2" ./c-wildwater_v3.dat; then #grep q renvoie 0 en cas de réussite ou 1 si le mot n'est pas dans la liste
         echo "Usine non existante"
         return 1
     fi
-    echo "$1"
-    grep -wF "$id" ./c-wildwater_v3.dat | ./main "leaks" "$1" 2>> output/stderr  #grep w renvoie exactement les lignes contenant cette chaîne de caractère (AKA l'ID)
+    grep -wF "$2" ./"$1" | ./main "leaks" "$2" 2>> output/stderr  #grep w renvoie exactement les lignes contenant cette chaîne de caractère (AKA l'ID)
     return 0
 
 }
 
-trie(){
+trie_graphique(){
     if (($# != 3));then
         echo "Erreur : manque d'argument" >> output/stderr
         return 1
     fi
-    case "$1" in
-        histo)
-            {
-                grep -E "^-;[^-;]+;-;" ./"$3"
-                echo "sources"
-                grep -E "^-;[^;]*;[^-;]*;[^-;]*;[^;]*" ./"$3"
-            } | ./main "histo" "$2" 2>> output/stderr
+    {
+        grep -E "^-;[^-;]+;-;" ./"$3"
+        echo "sources"
+        grep -E "^-;[^;]*;[^-;]*;[^-;]*;[^;]*" ./"$3"
+    } | ./main "histo" "$2" 2>> output/stderr
 
-            return 0
-            ;;
-        leak)        
-            liste_trie=("usine" "source" "stokage" "raccordement" "jonction")
-            for trie in "${liste_trie[@]}";do
-                time {
-                    {
-                        grep -E \
-                        -e "^-;[^-;]+;-;" \
-                        -e "^-;[^;]*;[^-;]*;[^-;]*;[^;]*" \
-                        -e "^-;[^-;]*;[^-;]*;-;[^-;]*" \
-                        -e "^[^;]*;Junction #[A-Z0-9]+;Service #[A-Z0-9]+;-;" \
-                        -e "^[^;]*;Service #[A-Z0-9]+;Cust #[A-Z0-9]+;-;[^;]*" \
-                        "$3" \
-                        
-                    }
-                }
-            done
-    esac
-}
+    return 0
+    }
 

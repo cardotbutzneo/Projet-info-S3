@@ -100,7 +100,7 @@ if [ "$2" = "histo" ]; then
         aide "histo"
         exit 1
     fi
-    time trie "$2" "$arg" "$1"
+    time trie_graphique "$2" "$arg" "$1"
     if [ "$4" = ".p" ]; then
         python3 gnuplot/run.py "$arg"
     elif [ "$4" = ".g" ]; then
@@ -123,7 +123,7 @@ if [ "$2" = "leaks" ]; then
         exit 1
     fi
     echo "$3"
-    fuites_tri "$3"
+    time fuites_tri "$1" "$3"
     exit 0
 fi
 

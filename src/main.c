@@ -83,79 +83,80 @@ int main(int argc, char* argv[]) {
     }
     // Gestion des fuites
 
-     else if (strcmp(type_traitement, "leaks") == 0) {
-    printf("Traitement des leaks '%s'...\n", argv[2]);
-    char* id_usine = argv[2];
-    pGlossaire glossaire = NULL;
-    int h = 0;
-    char buffer[1024];
-    char dash[8];
-    char parent_name[64];
-    char enfant_name[64];
-    double somme = 0.0;
-    double valeur;
-    double fuite=0.0;
+    else if (strcmp(type_traitement, "leaks") == 0) {
+        printf("Traitement des leaks '%s'...\n", argv[2]);
+        char* id_usine = argv[2];
+        pGlossaire glossaire = NULL;
+        int h = 0;
+        char buffer[1024];
+        char dash[8];
+        char parent_name[64];
+        char enfant_name[64];
+        double somme = 0.0;
+        double valeur;
+        double fuite=0.0;
 
-    while (fgets(buffer, sizeof(buffer), stdin)) {
+        while (fgets(buffer, sizeof(buffer), stdin)) {
 
-        if (traitement_ligne_fuite(buffer, dash, parent_name, enfant_name, &valeur, &fuite,&somme)) {
-            Troncon* parent_tr = NULL;
-            Troncon* enfant_tr = NULL;
-            
-
-
-            // --- Traitement du parent ---
-            if (strcmp(parent_name, "-") != 0) {
-
-                parent_tr = rechercheGlossaire(glossaire, parent_name);
-
-                if (!parent_tr) { //Vérifie si le tronçon parent n’existe pas encore dans le glossaire.
-                        parent_tr = creerTroncon(parent_name, fuite, valeur); // avc valeur le volume réel du tronçon
-                    } else if (valeur > 0) { //Ce bloc est exécuté si le parent existe déjà dans le glossaire, pas de comportement indéfini grâce au creerTroncon juste avant,si on mettait à jour à chaque ligne,on risque d'écraser le volume du parent par 0 c’est ce qui faisait que tt les volumes étaient nuls à un moment
-                        parent_tr->volume = valeur;
-                        parent_tr->fuite = fuite;
-                    }
-                glossaire = insertionGlossaire(glossaire, parent_tr, parent_name, &h);
-            }
-
-            // --- Traitement de l’enfant ---
-            if (strcmp(enfant_name, "-") != 0) {
-
-                enfant_tr = rechercheGlossaire(glossaire, enfant_name);
-
-                                if (!enfant_tr) {
-                    enfant_tr = creerTroncon(enfant_name, fuite, valeur);
-                } else if (valeur > 0) {
-                    enfant_tr->volume = valeur;
-                    enfant_tr->fuite = fuite;
-                }
-
-                glossaire = insertionGlossaire(glossaire, enfant_tr, enfant_name, &h);
-            }
-
-            if (parent_tr && enfant_tr) { // Vérifie doublon
+            if (traitement_ligne_fuite(buffer, dash, parent_name, enfant_name, &valeur, &fuite,&somme)) {
+                Troncon* parent_tr = NULL;
+                Troncon* enfant_tr = NULL;
                 
-                int exists = 0;
-                for (Enfant* e = parent_tr->enfants; e; e = e->suivant) {
-                    if (e->noeud == enfant_tr) { exists = 1; break; }
+                // --- Traitement du parent ---
+                if (strcmp(parent_name, "-") != 0) {
+
+                    parent_tr = rechercheGlossaire(glossaire, parent_name);
+
+                    if (!parent_tr) { //Vérifie si le tronçon parent n’existe pas encore dans le glossaire.
+                            parent_tr = creerTroncon(parent_name, fuite, valeur); // avc valeur le volume réel du tronçon
+                        } else if (valeur > 0) { //Ce bloc est exécuté si le parent existe déjà dans le glossaire, pas de comportement indéfini grâce au creerTroncon juste avant,si on mettait à jour à chaque ligne,on risque d'écraser le volume du parent par 0 c’est ce qui faisait que tt les volumes étaient nuls à un moment
+                            parent_tr->volume = valeur;
+                            parent_tr->fuite = fuite;
+                        }
+                    glossaire = insertionGlossaire(glossaire, parent_tr, parent_name, &h);
                 }
-                if (!exists) ajouter_enfant(parent_tr, enfant_tr);
+
+                // --- Traitement de l’enfant ---
+                if (strcmp(enfant_name, "-") != 0) {
+
+                    enfant_tr = rechercheGlossaire(glossaire, enfant_name);
+
+                                    if (!enfant_tr) {
+                        enfant_tr = creerTroncon(enfant_name, fuite, valeur);
+                    } else if (valeur > 0) {
+                        enfant_tr->volume = valeur;
+                        enfant_tr->fuite = fuite;
+                    }
+
+                    glossaire = insertionGlossaire(glossaire, enfant_tr, enfant_name, &h);
+                }
+
+                if (parent_tr && enfant_tr) { // Vérifie doublon
+                    
+                    int exists = 0;
+                    for (Enfant* e = parent_tr->enfants; e; e = e->suivant) {
+                        if (e->noeud == enfant_tr) { exists = 1; break; }
+                    }
+                    if (!exists) ajouter_enfant(parent_tr, enfant_tr);
+                }
+
+            } else {
+                fprintf(stderr, "Ligne mal formée : %s", buffer);
             }
-
-        } else {
-            fprintf(stderr, "Ligne mal formée : %s", buffer);
         }
-    }
 
-    Troncon* usine = rechercheGlossaire(glossaire, id_usine);
-    if (!usine) {
-        fprintf(stderr, "Usine non trouvée : %s\n", id_usine);
-    } else {
-        usine->volume=somme;
-        printf("vol: %f\n", usine->volume);
-        double total_fuites = calcul_fuites(glossaire, id_usine);   
-        printf("Fuites totales pour '%s' : %.3fk.m3\n", id_usine, total_fuites);
+        Troncon* usine = rechercheGlossaire(glossaire, id_usine);
+        if (!usine) {
+            fprintf(stderr, "Usine non trouvée : %s\n", id_usine);
+        } 
+
+        else {
+            usine->volume=somme;
+            printf("vol: %f\n", usine->volume);
+            double total_fuites = calcul_fuites(glossaire, id_usine);   
+            printf(VERT"Fuites totales pour '%s' : %.3fk.m3\n"RESET, id_usine, total_fuites);
+        }
+        libererGlossaire(glossaire);
     }
-    libererGlossaire(glossaire);
-    }
+    return 0;
 }
