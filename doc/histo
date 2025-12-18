@@ -9,4 +9,4 @@ Créer un des types de graphique suivant :
 [.p]          utilise python pour créer le graphique
 [.g]          utilise gnuplot pour créer le graphique
 
-Attention rentrer le chemin vers le fichier de données, sinon histo ne marchera pas.
+Attention rentrez le chemin vers le fichier de données, sinon histo ne marchera pas.

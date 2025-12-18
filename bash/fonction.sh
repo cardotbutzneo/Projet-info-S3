@@ -23,7 +23,7 @@ verifDependance() {
     return 0
 }
 
-
+#fonction inutile mais drole
 BarreDeProgression() {
     local cmp=0
     local bar=""
@@ -74,7 +74,9 @@ afifchageInit(){
     echo "Go outside touching grass, lol player 🐒 🐒"
 }
 
-erreur() {
+###
+
+erreur() { # fonction d'erreur pour le shell
     printf "%b\n" "${ROUGE}$1${RESET}" >> output/stderr
 }
 
@@ -85,7 +87,7 @@ fuites_tri() { #vu qu'ici on a besoin de tous les tronçons liés à l'usine  on
     echo "Usage: fuites_tri <Type ID_Usine>"
     return 1
     fi
-    if ! grep -qwF "$2" ./c-wildwater_v3.dat; then #grep q renvoie 0 en cas de réussite ou 1 si le mot n'est pas dans la liste
+    if ! grep -qwF "$2" ./"$1"; then #grep q renvoie 0 en cas de réussite ou 1 si le mot n'est pas dans la liste
         echo "Usine non existante"
         return 1
     fi
@@ -94,7 +96,7 @@ fuites_tri() { #vu qu'ici on a besoin de tous les tronçons liés à l'usine  on
 
 }
 
-trie_graphique(){
+trie_graphique(){ # génère le graphique
     if (($# != 3));then
         echo "Erreur : manque d'argument" >> output/stderr
         return 1

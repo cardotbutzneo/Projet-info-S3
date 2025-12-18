@@ -1,0 +1,4 @@
+Usage : leaks [option1]
+Donne la somme des fuites sur un tronçon donnée.
+
+[id]         Identifiant de l'usine à traiter

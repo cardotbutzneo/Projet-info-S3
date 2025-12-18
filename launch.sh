@@ -5,7 +5,7 @@ source "bash/fonction.sh"
 
 liste_cmd=("histo" "leaks" "-r" "--run" "-c" "--clean")
 
-if [ "$1" = "-h" ] || [ "$1" = "--help" ];then
+if [ "$1" = "-h" ] || [ "$1" = "--help" ];then # affiche l'aide global si demandé
     if [ "$2" = "-a" ] || [ "$2" = "--all" ];then
         afficherDoc
         exit 0
@@ -14,8 +14,8 @@ fi
 
 prev=""
 for token in "$@"; do
-    if [ "$token" = "-h" ] || [ "$token" = "--help" ]; then
-        # Affiche l'aide du dernier argument avant -h/--help
+    if [ "$token" = "-h" ] || [ "$token" = "--help" ]; then # affiche l'aide de l'argument
+
         if [ -z "$prev" ]; then
             echo "Aucune commande spécifiée pour l'aide"
             exit 1
@@ -27,7 +27,7 @@ for token in "$@"; do
 done
 
 if [ "$1" != "-c" ] && [ "$1" != "--clean" ]; then
-    verifDependance
+    verifDependance # vérifit les dépendances (non acces aux graphiques si python pas installé)
     verif="$?"
     verif_flag=1  # Faux par défaut
     if [ "$verif" -eq 0 ]; then
@@ -35,7 +35,7 @@ if [ "$1" != "-c" ] && [ "$1" != "--clean" ]; then
     fi
 fi
 
-if [ "$1" = "-r" ] || [ "$1" = "--run" ]; then
+if [ "$1" = "-r" ] || [ "$1" = "--run" ]; then # compile
     if [ -n "$2" ] && [ "$2" != "--force" ];then
         echo -e "${JAUNE}Argument invalide apres -r${RESET}"
         echo "-r/--run ne prend pas d'autre argument que [--force]"
@@ -54,7 +54,7 @@ fi
 
 
 
-if [ "$1" = "-c" ] || [ "$1" = "--clean" ]; then
+if [ "$1" = "-c" ] || [ "$1" = "--clean" ]; then # clean
     make clean
     if [ "$2" = "-a" ] || [ "$2" = "--all" ]; then
         if [ -n "$3" ]; then
@@ -75,7 +75,7 @@ if [ "$1" = "-c" ] || [ "$1" = "--clean" ]; then
 fi
 
 
-if [ "$1" = "histo" ];then
+if [ "$1" = "histo" ];then # histogramme
     echo -e "${ROUGE}Erreur : vous devez préciser le chemin du fichier .dat en premier paramètre${RESET}"
     exit 1
 fi
@@ -85,7 +85,7 @@ if [ "$2" = "histo" ]; then
         echo -e "${ROUGE}Erreur : le fichier '$1' est introuvable${RESET}"
         exit 1
     fi
-    if [ ! -f "main" ] && [ ! -f "main.exe" ]; then
+    if [ ! -f "main" ] && [ ! -f "main.exe" ]; then # vérifit si l'exe est dispo
         echo "Erreur : l'exécutable est introuvable. Compiler avant d'exécuter."
         exit 1
     fi
@@ -100,16 +100,16 @@ if [ "$2" = "histo" ]; then
         aide "histo"
         exit 1
     fi
-    time trie_graphique "$2" "$arg" "$1"
+    time trie_graphique "$2" "$arg" "$1" # lance le c
     if [ "$4" = ".p" ]; then
-        python3 gnuplot/run.py "$arg"
+        python3 gnuplot/run.py "$arg" #graphique sur python
     elif [ "$4" = ".g" ]; then
         gnuplot gnuplot/run.gp
     fi
     exit 0
 fi
 
-if [ "$2" = "leaks" ]; then
+if [ "$2" = "leaks" ]; then # fuites
     if [ -z "$1" ];then
         echo "Erreur : chemin du fichier attendu"
         exit 1
