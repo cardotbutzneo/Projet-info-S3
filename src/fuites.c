@@ -151,7 +151,7 @@ Troncon* rechercheGlossaire(pGlossaire a, const char* id) { // Recherche d'un id
     return NULL;
 }
 
-Troncon* creerTroncon(const char *id, double fuite, double volume){ // Créastion d'un tronçon dans le cas de l'arbre k-aire
+Troncon* creerTroncon(const char *id, double fuite, double volume){ // Création d'un tronçon dans le cas de l'arbre k-aire
     Troncon* nouveau = malloc(sizeof(Troncon));
     if (nouveau == NULL){
         printf("Erreur d'allocation de mémoire");
@@ -276,3 +276,4 @@ int traitement_ligne_fuite(
 
     return 1;
 }
+
