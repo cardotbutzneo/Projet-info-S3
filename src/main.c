@@ -152,10 +152,7 @@ int main(int argc, char* argv[]) {
         else {
             usine->volume=somme;
             double total_fuites = calcul_fuites(glossaire, id_usine);   
-            int verif = ecriture_fichier(id_usine, total_fuites);
-            if (verif ==2){
-                fprintf(stderr, "Usine déjà présente dans le fichier \n");
-            }
+            int verif = ecriture_fichier(id_usine, total_fuites); 
             if (verif ==3){
                 fprintf(stderr, "Fichier vide \n");
             }
