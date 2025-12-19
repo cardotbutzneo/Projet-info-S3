@@ -70,7 +70,7 @@ if [ "$1" = "-c" ] || [ "$1" = "--clean" ]; then # clean
         echo -e "${ROUGE}Attention : vous supprimez les graphiques et fichiers temporaires${RESET}"
         read -p "Confirmer ce choix [y/n]: " confirm
         if [ "$confirm" = "y" ]; then
-            rm -rf gnuplot/graphique/* gnuplot/data/*
+            rm -rf graphique/graphique/* graphique/data/*
             echo "Suppression terminée"
         else
             echo "Opération annulée"
