@@ -227,10 +227,10 @@ void ecrireUsine(pUsine *dict, int taille, char destination[64], int type){ // (
     if (type > 1 || type < 0) return;
     // Fichier par défaut
     if (destination[0] == '\0' && type == 1) {
-        strcpy(destination, "gnuplot/data/usine_max.dat");
+        strcpy(destination, "graphique/data/usine_max.dat");
     }
     else if (destination[0] == '\0' && type == 0){
-        strcpy(destination, "gnuplot/data/usine_min.dat");
+        strcpy(destination, "graphique/data/usine_min.dat");
     }
     
     FILE *f = fopen(destination, "w");

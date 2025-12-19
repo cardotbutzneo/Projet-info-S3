@@ -91,7 +91,7 @@ fuites_tri() { #vu qu'ici on a besoin de tous les tronçons liés à l'usine  on
         echo "Usine non existante"
         return 1
     fi
-    grep -wF "$2" ./"$1" | ./main "leaks" "$2" 2>> output/stderr  #grep w renvoie exactement les lignes contenant cette chaîne de caractère (AKA l'ID)
+    grep -wF "$2" ./"$1" | ./main "leaks" "$2" > output/stdout 2> output/stderr  #grep w renvoie exactement les lignes contenant cette chaîne de caractère (AKA l'ID)
     return 0
 
 }
@@ -105,7 +105,7 @@ trie_graphique(){ # génère le graphique
         grep -E "^-;[^-;]+;-;" ./"$3"
         echo "sources"
         grep -E "^-;[^;]*;[^-;]*;[^-;]*;[^;]*" ./"$3"
-    } | ./main "histo" "$2" 2>> output/stderr
+    } | ./main "histo" "$2" > output/stdout 2> output/stderr
 
     return 0
     }

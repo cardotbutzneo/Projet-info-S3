@@ -2,7 +2,7 @@ import sys
 import csv
 import matplotlib.pyplot as plt
 
-DATA_DIR = "gnuplot/data/"
+DATA_DIR = "graphique/data/"
 
 # -----------------------------------------------------------
 # Lecture fichier .dat

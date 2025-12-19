@@ -79,6 +79,7 @@ if [ "$1" = "-c" ] || [ "$1" = "--clean" ]; then # clean
     exit 0
 fi
 
+mkdir -p "gnuplot/data" "gnuplot/graphique" 2> /dev/null
 
 if [ "$1" = "histo" ];then # histogramme
     echo -e "${ROUGE}Erreur : vous devez préciser le chemin du fichier .dat en premier paramètre${RESET}"
@@ -107,12 +108,11 @@ if [ "$2" = "histo" ]; then
     fi
     time trie_graphique "$2" "$arg" "$1" # lance le c
     if [ "$4" = ".p" ]; then
-        python3 gnuplot/run.py "$arg" #graphique sur python
-    elif [ "$4" = ".g" ]; then
-        gnuplot gnuplot/run.gp
-    fi
+        python3 graphique/run.py "$arg" #graphique sur python
     exit 0
+    fi
 fi
+
 
 if [ "$2" = "leaks" ]; then # fuites
     if [ -z "$1" ];then
@@ -121,6 +121,10 @@ if [ "$2" = "leaks" ]; then # fuites
     fi
     if [ ! -f "$1" ]; then
         echo -e "${ROUGE}Erreur : le fichier '$1' est introuvable${RESET}"
+        exit 1
+    fi
+    if [ ! -f "main" ] && [ ! -f "main.exe" ]; then # vérifit si l'exe est dispo
+        echo "Erreur : l'exécutable est introuvable. Compiler avant d'exécuter."
         exit 1
     fi
     if [ -z "$3" ]; then
