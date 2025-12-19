@@ -287,19 +287,20 @@ int ecriture_fichier(char* id, double volume){
         return 3;   
     }
     rewind(f);
-    while (fscanf(f, "%49[^;];%lf;\n", id_lu, &volume_lu) == 2) {
+    while (fscanf(f, "%49[^;];%lf;\n", id_lu, &volume_lu) !=EOF) { //s'arrête à la première instance où il y a un point virgule, soit le premier champ (soit l'ID)
         if (strcmp(id, id_lu) == 0) {
             trouve = 1;
             break;
         }
     }
     if (!trouve) {
-        fprintf(f, "%s;%.3f;\n", id, volume);
+        fprintf(f, "%s;%.3f k.m3;\n", id, volume);
         fclose(f);
-        return 2;   
+        return 1;  
     }
     else{
         printf("L'usine %s est déjà existante \n", id);
+        return 2;
     }
 
     fclose(f);
