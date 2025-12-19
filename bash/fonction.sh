@@ -101,6 +101,7 @@ trie_graphique(){ # génère le graphique
         echo "Erreur : manque d'argument" >> output/stderr
         return 1
     fi
+    echo "Réalisation des graphiques"
     {
         grep -E "^-;[^-;]+;-;" ./"$3"
         echo "sources"

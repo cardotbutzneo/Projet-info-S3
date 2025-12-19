@@ -79,7 +79,7 @@ if [ "$1" = "-c" ] || [ "$1" = "--clean" ]; then # clean
     exit 0
 fi
 
-mkdir -p "gnuplot/data" "gnuplot/graphique" 2> /dev/null
+mkdir -p "graphique/data" "graphique/graphique" 2> /dev/null
 
 if [ "$1" = "histo" ];then # histogramme
     echo -e "${ROUGE}Erreur : vous devez préciser le chemin du fichier .dat en premier paramètre${RESET}"
