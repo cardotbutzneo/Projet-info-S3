@@ -192,7 +192,10 @@ double propagation(Troncon* parent, double volume) {
         double part = volume_restant / parent->nb_enfants;
         Enfant* e = parent->enfants;
         while (e != NULL) {
+            e->noeud->volume = part * (1.0 - e->noeud->fuite / 100.0); // Mise à jour du volume de l'enfant en fonction de sa fuite
             total_fuite += propagation(e->noeud, part);
+        //printf("ID=%s vol=%lf leaks=%lf \n ", e->noeud->id, e->noeud->volume, e->noeud->fuite);
+
             e = e->suivant;
         }
     }
@@ -208,7 +211,6 @@ double calcul_fuites(pGlossaire a, const char* id){
     if (troncon == NULL){  
         return -1.0; // Renvoie -1 si le tronçon est nul
     } else {
-        //printf("ID=%s\nvol=%lf\nleaks=%lf\n", troncon->id, troncon->volume, troncon->fuite);
         return propagation(troncon, troncon->volume); // Appel vers la fonction propagation en cas d'existence du tronçon
     }
 }
