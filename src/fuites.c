@@ -287,14 +287,14 @@ int ecriture_fichier(char* id, double volume){
         return 3;   
     }
     rewind(f);
-    while (fscanf(f, "%49[^;];%lf;\n", id_lu, &volume_lu) == 2) { //s'arrête à la première instance où il y a un point virgule, soit le premier champ (soit l'ID)
+    while (fscanf(f, "%49[^;];%lf;\n", id_lu, &volume_lu) !=EOF) { //s'arrête à la première instance où il y a un point virgule, soit le premier champ (soit l'ID)
         if (strcmp(id, id_lu) == 0) {
             trouve = 1;
             break;
         }
     }
     if (!trouve) {
-        fprintf(f, "%s;%.3f;\n", id, volume);
+        fprintf(f, "%s;%.3f k.m3;\n", id, volume);
         fclose(f);
         return 1;  
     }
