@@ -134,7 +134,11 @@ int main(int argc, char* argv[]) {
 
         Troncon* usine = rechercheGlossaire(glossaire, id_usine);
         if (!usine) {
-            printErreur("Usine non trouvé");
+            printErreur("Usine non trouvée");
+            FILE* f = fopen("graphique/data/fuites.dat", "a");
+            double volume_usine_nonexistant = -1.0;
+            fprintf(f, " %s;%.3f k.m3;\n", id_usine, volume_usine_nonexistant);
+            fclose(f);
         } 
 
         else {
