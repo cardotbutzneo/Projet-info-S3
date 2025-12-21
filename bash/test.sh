@@ -36,6 +36,11 @@ echo "Test des leaks avec 'Module #OG100951D'"
 
 
 bash launch.sh c-wildwater_v3.dat leaks "Module #OG100951D"
+bash launch.sh c-wildwater_v3.dat leaks "Unit #GV001308I"
+bash launch.sh c-wildwater_v3.dat leaks "Module #UB100142L"
+bash launch.sh c-wildwater_v3.dat leaks "Unit #NH001007A"
+
+mv graphique/data/fuites.dat test/ &> /dev/null
 
 if [ "$?" -eq 1 ];then
     echo "Probleme dans le calcul des fuites"
