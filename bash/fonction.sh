@@ -9,7 +9,7 @@ VIOLET="\e[35m"
 RESET="\e[0m"
 
 verifDependance() {
-    local args=("gnuplot" "python3")
+    local args=("python3")
 
     for cmd in "${args[@]}"; do
         if ! command -v "$cmd" &> /dev/null; then

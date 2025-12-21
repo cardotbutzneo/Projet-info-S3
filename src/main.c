@@ -136,6 +136,12 @@ int main(int argc, char* argv[]) {
         if (!usine) {
             printErreur("Usine non trouvée");
             FILE* f = fopen("graphique/data/fuites.dat", "a");
+            if (!f){
+                printErreur("Impossible de crér / d'ouvrir le fichier\n");
+                libererGlossaire(glossaire);
+                libererReseau(usine);
+                exit(1);
+            }
             double volume_usine_nonexistant = -1.0;
             fprintf(f, " %s;%.3f k.m3;\n", id_usine, volume_usine_nonexistant);
             fclose(f);
