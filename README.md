@@ -69,7 +69,7 @@ A la fin de l'éxécution, le programme sort une paire de graphiques, dans le do
 Les sorties (stdin ou stderr) sont redirigées vers le nom associée dans le dossier output/
 
 ## ℹ️ Information supplémentaire
-Vous disposez d'un fichier 'test.sh' dans le dossier bash/. Celui-ci permet de lancer toutes les commandes disponibles afin de tester le programme.
+Vous disposez d'un fichier 'test.sh' dans le dossier bash/. Celui-ci permet de lancer toutes les commandes disponibles afin de tester le programme. <br>
 Commande: 
 ```
 bash bash/test.sh
@@ -78,4 +78,5 @@ Les graphiques sont sauvegarder dans un dossier test/ <br>
 Liste des commandes lancées :
 - histo (max/src/real/all)
 - leaks "Module #OG100951D"
+
 
