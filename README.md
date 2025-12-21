@@ -8,7 +8,7 @@ Deuxième année de Pré-Ingénieur CY Tech, Semestre 3 2025-2026
 
 ## 📄 Documentation
 - :scroll: [Cahier des charges](./Projet_C-WildWater_preIng2_2025_2026_v1.1.pdf)
-- :ledger: [Rapport de projet](https://ucergyfr-my.sharepoint.com/:w:/g/personal/adchayan_jeyakumar_etu_cyu_fr/IQB6Im92as5eQ5P6oZGU3YcpAXwWIHeEV21_lHRHWehkfu0?rtime=SsLKMew-3kg)
+- :ledger: [Rapport de projet](./Rapport_de_Projet_-_C-Wildwater.pdf)
 
 ## :gear: Description
 Ce projet vise à gérer les données d’un réseau de distribution d’eau potable.
@@ -70,7 +70,12 @@ Les sorties (stdin ou stderr) sont redirigées vers le nom associée dans le dos
 
 ## ℹ️ Information supplémentaire
 Vous disposez d'un fichier 'test.sh' dans le dossier bash/. Celui-ci permet de lancer toutes les commandes disponibles afin de tester le programme.
+Commande: 
+```
+bash bash/test.sh
+```
 Les graphiques sont sauvegarder dans un dossier test/ <br>
 Liste des commandes lancées :
 - histo (max/src/real/all)
 - leaks "Module #OG100951D"
+
