@@ -21,6 +21,9 @@ pGlossaire creerGlossaire(const char* id, Troncon* adresse){
 }
 
 pGlossaire Glossaire_rotationGauche(pGlossaire a){
+    if (a == NULL){
+        return NULL;
+    }
     pGlossaire pivot = a->fd; // Le fils droit devient le pivot
     int eq_a = a->eq, eq_p = pivot->eq;
     a->fd = pivot->fg; // Le sous-arbre gauche du pivot devient le fils droit de 'a'
@@ -44,6 +47,9 @@ pGlossaire Glossaire_rotationGauche(pGlossaire a){
 }
 
 pGlossaire Glossaire_rotationDroite(pGlossaire a){
+    if (a == NULL){
+        return NULL;
+    }
     pGlossaire pivot = a->fg; // Le fils gauche devient le pivot
     int eq_a = a->eq, eq_p = pivot->eq;
     a->fg = pivot->fd; // Le sous-arbre droit du pivot devient le fils gauche de 'a'
@@ -67,16 +73,25 @@ pGlossaire Glossaire_rotationDroite(pGlossaire a){
 }
 
  pGlossaire Glossaire_doubleRotationGauche(pGlossaire a){
+    if (a == NULL){
+        return NULL;
+    }
     a->fd = Glossaire_rotationDroite(a->fd);
     return Glossaire_rotationGauche(a);
  }
 
 pGlossaire Glossaire_doubleRotationDroite(pGlossaire a){
+    if (a == NULL){
+        return NULL;
+    }
    a->fg = Glossaire_rotationGauche(a->fg);
    return Glossaire_rotationDroite(a);
  }
 
 pGlossaire equilibrerGlossaire(pGlossaire a) {
+    if (a == NULL){
+        return NULL;
+    }
     if (a->eq >= 2) { // Cas où le coté droit de l'arbre est déséquilibré.
         if (a->fd->eq >= 0) {
            return Glossaire_rotationGauche(a); 
@@ -307,4 +322,5 @@ int ecriture_fichier(char* id, double volume){
 
     fclose(f);
     return 1;       
+
 }
