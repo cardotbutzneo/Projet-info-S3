@@ -70,6 +70,7 @@ Les sorties (stdin ou stderr) sont redirigées vers le nom associée dans le dos
 
 ## ℹ️ Information supplémentaire
 Vous disposez d'un fichier 'test.sh' dans le dossier bash/. Celui-ci permet de lancer toutes les commandes disponibles afin de tester le programme. <br>
+
 Commande: 
 ```
 bash bash/test.sh
@@ -78,5 +79,6 @@ Les graphiques sont sauvegarder dans un dossier test/ <br>
 Liste des commandes lancées :
 - histo (max/src/real/all)
 - leaks "Module #OG100951D"
+
 
 
