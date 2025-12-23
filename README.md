@@ -36,8 +36,8 @@ bash launch.sh -r
 Exemple de commande valide :
 ```
 bash launch.sh -r
-bash launch.sh histo max
-bash launch.sh histo all
+bash launch.sh chemin_du_fichier histo max
+bash launch.sh chemin_du_fichier histo all
 bash launch.sh -c -a
 ```
 Les commandes pour l'histogramme sont:
@@ -48,11 +48,12 @@ Les commandes pour l'histogramme sont:
 
 La commande pour les fuites est:
 ```
-bash launch.sh leaks "id_usine"
+bash launch.sh chemin_du_fichier leaks "id_usine"
 ```
 Exemple de commande valide :
 ```bash
-bash launch.sh leaks "Facility complex #WI400023I"
+bash launch.sh c-wildwater_v3.dat leaks "Module #UB100142L"
+
 ````
 ⚠️ Attention : les guillemets autour de l’identifiant de l’usine sont nécessaires !
 
@@ -80,6 +81,7 @@ Les graphiques sont sauvegarder dans un dossier test/ <br>
 Liste des commandes lancées :
 - histo (max/src/real/all)
 - leaks "Module #OG100951D"
+
 
 
 
